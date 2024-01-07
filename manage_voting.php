@@ -97,7 +97,9 @@ while ($row = $settings->fetch_assoc()) {
 					</div>
 					<?php
 					$cats = $conn->query("SELECT * FROM category_list where id in (SELECT category_id from voting_opt where voting_id = '" . $_GET['id'] . "' )");
+
 					while ($row = $cats->fetch_assoc()) :
+
 					?>
 						<hr>
 						<div class="row mb-4">
@@ -115,7 +117,18 @@ while ($row = $settings->fetch_assoc()) {
 							</div>
 						</div>
 						<div class="row mt-3">
-							<?php foreach ($opt_arr[$row['id']] as $candidate) {
+
+							<?php
+							// Fetch party list information
+							$partyListQuery = $conn->query("SELECT * FROM party_list WHERE id IN (SELECT partylist_id FROM voting_opt WHERE voting_id = '" . $_GET['id'] . "')");
+
+							// Create an associative array to store party list information
+							$partyListData = [];
+							while ($party = $partyListQuery->fetch_assoc()) {
+								$partyListData[$party['id']] = $party;
+							}
+
+							foreach ($opt_arr[$row['id']] as $candidate) {
 							?>
 								<div class="candidate" style="position: relative;">
 									<span class="rem_btn"><button class="btn btn-rounded btn-sm btn-outline-danger del_candidated" data-id="<?php echo $candidate['id'] ?>"><i class="fa fa-trash"></i></button></span>
@@ -125,14 +138,20 @@ while ($row = $settings->fetch_assoc()) {
 										</div>
 										<br>
 										<div class="text-center">
-											<large class="text-center"><b>
-													<?php echo ucwords($candidate['opt_txt']) ?>
-												</b></large>
-											<p><em>Partylist: <?php echo $candidate['partylist_id'] ?></em></p>
+											<large class="text-center"><b><?php echo ucwords($candidate['opt_txt']) ?></b></large>
+
+											<?php
+											// Display party list information here
+											if (isset($partyListData[$candidate['partylist_id']])) {
+												$party = $partyListData[$candidate['partylist_id']];
+												echo "<p><em>Partylist: {$party['partylist']}</em></p>";
+											}
+											?>
 										</div>
 									</div>
 								</div>
 							<?php } ?>
+
 						</div>
 					<?php endwhile; ?>
 				</div>

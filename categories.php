@@ -62,10 +62,10 @@
 								<label class="control-label">Position</label>
 								<input type="text" class="form-control" name="category">
 							</div>
-							<div class="form-group">
+							<!-- <div class="form-group">
 								<label class="control-label">HomeRoom</label>
 								<input type="text" class="form-control" name="category">
-							</div>
+							</div> -->
 						</div>
 						<div class="card-footer">
 							<div class="row">
@@ -114,7 +114,7 @@
 			</div>
 
 			<!-- new homeroom -->
-			<div class="col-md-6">
+			<!-- <div class="col-md-6">
 				<div class="card">
 					<div class="card-body">
 						<table class="table table-bordered table-hover">
@@ -144,7 +144,7 @@
 						</table>
 					</div>
 				</div>
-			</div>
+			</div> -->
 			<!-- Table Panel -->
 		</div>
 

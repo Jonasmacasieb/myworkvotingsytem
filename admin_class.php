@@ -35,8 +35,10 @@ class Action
 				$_SESSION['login_' . $key] = $value;
 			}
 
-			// Update user's online status to 1 (online)
-			$this->db->query("UPDATE users SET online_status = 1 WHERE username = '" . $username . "'");
+			// Update online_status to 1 (online) in the database
+			include('db_connect.php'); // Make sure to include the database connection
+			$user_id = (int)$_SESSION['login_id'];
+			$conn->query("UPDATE users SET online_status = 1 WHERE id = $user_id");
 
 			if ((int)$_SESSION['login_type'] == 1) {
 				return 1; // Admin user
@@ -108,15 +110,16 @@ class Action
 	// }
 	function logout()
 	{
-		// Get the current user's username and user type from the session
-		$username = isset($_SESSION['login_username']) ? $_SESSION['login_username'] : '';
+		// Get the current user's user ID and user type from the session
+		$user_id = isset($_SESSION['login_id']) ? (int)$_SESSION['login_id'] : 0;
 		$userType = isset($_SESSION['login_type']) ? (int)$_SESSION['login_type'] : 0;
-
-		// Update the user's online status to 'offline' in the database
-		$this->db->query("UPDATE users SET online_status = 'offline' WHERE username = '" . $username . "'");
 
 		// Clear the session
 		$_SESSION = array();
+
+		// Update online_status to 'offline' in the database
+		include('db_connect.php');
+		$conn->query("UPDATE users SET online_status = 'offline' WHERE id = $user_id");
 
 		// Redirect based on user type
 		if ($userType == 1) {
@@ -127,6 +130,8 @@ class Action
 			header("location: trylogin.php");
 		}
 	}
+
+
 
 
 
@@ -348,15 +353,13 @@ class Action
 		$data = " category_id = '" . $category_id . "' ";
 		$data .= ", opt_txt = '" . $opt_txt . "' ";
 		$data .= ", voting_id = '" . $voting_id . "' ";
-
-		$data = " partylist_id = '" . $partylist_id . "' ";
+		$data .= ", partylist_id = '" . $partylist_id . "' ";
 
 		if ($_FILES['img']['tmp_name'] != '') {
 			$fname = strtotime(date('y-m-d H:i')) . '_' . $_FILES['img']['name'];
 			$move = move_uploaded_file($_FILES['img']['tmp_name'], 'assets/img/' . $fname);
 			$data .= ", image_path = '" . $fname . "' ";
 			if (!empty($id)) {
-
 				$path = $this->db->query("SELECT * FROM voting_opt where id=" . $id)->fetch_array()['image_path'];
 				if (!empty($path))
 					unlink('assets/img/' . $path);
@@ -373,6 +376,7 @@ class Action
 				return 2;
 		}
 	}
+
 	function delete_candidate()
 	{
 		extract($_POST);

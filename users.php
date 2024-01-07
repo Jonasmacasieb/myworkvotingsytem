@@ -1,7 +1,7 @@
 <?php
 include 'db_connect.php';
 ?>
-
+<!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> -->
 <style>
 	.container-fluid {
 		margin-top: 40px;
@@ -156,8 +156,10 @@ include 'db_connect.php';
 								<td>
 									<center> <?php echo $row['department'] ?></center>
 								</td>
-								<td>
-									<center> <?php echo $row['online_status'] ?></center>
+								<td data-user-id="<?php echo $row['id']; ?>">
+									<center id="online_status_<?php echo $row['id']; ?>">
+										<?php echo $row['online_status']; ?>
+									</center>
 								</td>
 								<td>
 									<center> <?php echo $row['type'] ?></center>
@@ -186,6 +188,34 @@ include 'db_connect.php';
 			</div>
 		</div>
 	</div>
+
+	<script>
+		function updateOnlineStatus(user_id) {
+			$.ajax({
+				url: 'get_online_status.php',
+				type: 'GET',
+				data: {
+					id: user_id
+				},
+				success: function(data) {
+					$('#online_status_' + user_id).html(data);
+				},
+				error: function() {
+					console.error('Error updating online status');
+				}
+			});
+		}
+
+		// Call updateOnlineStatus for each user every 5 seconds
+		function refreshOnlineStatus() {
+			$('[data-user-id]').each(function() {
+				var user_id = $(this).data('user-id');
+				updateOnlineStatus(user_id);
+			});
+		}
+
+		setInterval(refreshOnlineStatus, 5000);
+	</script>
 
 
 	<script>
