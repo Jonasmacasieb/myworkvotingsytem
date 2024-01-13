@@ -14,9 +14,26 @@
         }
 
         #bar-container {
-            position: relative;
             margin: auto;
             width: 80%;
+        }
+
+        .card {
+            border: 1px solid #3498db;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .serif-font {
+            font-family: serif;
+            font-size: 35px;
+        }
+
+        .gradient-background {
+            background: linear-gradient(to bottom, #ff7e5f, #feb47b);
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
         }
     </style>
     <?php include('db_connect.php'); ?>
@@ -49,154 +66,182 @@
 </head>
 
 <body>
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="container-fluid">
+                    <div id="chart-container" style=" float: left;">
+                        <canvas id="pieChart"></canvas>
+                    </div>
+                    <br><br>
+                    <div id="legend-container" style="float: left;">
+                        <!-- Legend will be displayed here -->
+                    </div>
 
-    <div class="container-fluid">
-        <div id="chart-container" style=" float: left;">
-            <canvas id="pieChart"></canvas>
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                    <script>
+                        // Define a global variable to store the colors
+                        let pieChartColors = [];
+
+                        document.addEventListener("DOMContentLoaded", function() {
+                            // Use the PHP-generated data to create the pie chart
+                            createPieChart(data);
+                        });
+
+                        function createPieChart(data) {
+                            const ctx = document.getElementById("pieChart").getContext("2d");
+
+                            // Check if colors are not generated yet
+                            if (pieChartColors.length === 0) {
+                                // Generate colors and store them
+                                pieChartColors = getRandomColors(data.length);
+                            }
+
+                            new Chart(ctx, {
+                                type: 'pie',
+                                data: {
+                                    labels: data.map(entry => entry.department),
+                                    datasets: [{
+                                        data: data.map(entry => entry.vote_count),
+                                        backgroundColor: pieChartColors,
+                                    }],
+                                },
+                                options: {
+                                    legend: {
+                                        display: false, // Hide default legend
+                                    },
+                                },
+                            });
+
+                            // Create custom legend
+                            const legendContainer = document.getElementById("legend-container");
+                            const legendHTML = createLegendHTML(data);
+                            legendContainer.innerHTML = legendHTML;
+                        }
+
+                        function createLegendHTML(data) {
+                            let legendHTML = '<ul>';
+                            data.forEach(entry => {
+                                legendHTML += `<li>${entry.department}: ${entry.vote_count}</li>`;
+                            });
+                            legendHTML += '</ul>';
+                            return legendHTML;
+                        }
+
+                        function getRandomColors(count) {
+                            // Define a fixed set of colors
+                            const fixedColors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#c0c0c0', '#808080', '#800000', '#008000'];
+
+                            // Return a slice of the fixed colors array based on the count
+                            return fixedColors.slice(0, count);
+                        }
+                    </script>
+                </div>
+            </div>
         </div>
-        <br><br>
-        <div id="legend-container" style="float: left;">
-            <!-- Legend will be displayed here -->
-        </div>
-
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script>
-            // Define a global variable to store the colors
-            let pieChartColors = [];
-
-            document.addEventListener("DOMContentLoaded", function() {
-                // Use the PHP-generated data to create the pie chart
-                createPieChart(data);
-            });
-
-            function createPieChart(data) {
-                const ctx = document.getElementById("pieChart").getContext("2d");
-
-                // Check if colors are not generated yet
-                if (pieChartColors.length === 0) {
-                    // Generate colors and store them
-                    pieChartColors = getRandomColors(data.length);
-                }
-
-                new Chart(ctx, {
-                    type: 'pie',
-                    data: {
-                        labels: data.map(entry => entry.department),
-                        datasets: [{
-                            data: data.map(entry => entry.vote_count),
-                            backgroundColor: pieChartColors,
-                        }],
-                    },
-                    options: {
-                        legend: {
-                            display: false, // Hide default legend
-                        },
-                    },
-                });
-
-                // Create custom legend
-                const legendContainer = document.getElementById("legend-container");
-                const legendHTML = createLegendHTML(data);
-                legendContainer.innerHTML = legendHTML;
-            }
-
-            function createLegendHTML(data) {
-                let legendHTML = '<ul>';
-                data.forEach(entry => {
-                    legendHTML += `<li>${entry.department}: ${entry.vote_count}</li>`;
-                });
-                legendHTML += '</ul>';
-                return legendHTML;
-            }
-
-            function getRandomColors(count) {
-                // Define a fixed set of colors
-                const fixedColors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#c0c0c0', '#808080', '#800000', '#008000'];
-
-                // Return a slice of the fixed colors array based on the count
-                return fixedColors.slice(0, count);
-            }
-        </script>
     </div>
 
+
+
+    <br>
     <!-- bar chart new task -->
 
-    <div class="card col-lg-12">
-        <div id="bar-container"></div>
-        <script>
-            $(document).ready(function() {
-                // Predefined fixed colors
-                const fixedColors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#c0c0c0', '#808080', '#800000', '#008000'];
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div id="bar-container">
 
-                // Fetch data from the server
-                $.ajax({
-                    url: 'departmentdata.php', // Replace with your actual backend endpoint
-                    method: 'GET',
-                    dataType: 'json',
-                    success: function(response) {
-                        // Extract data from the response
-                        const departments = response.departments;
-                        const section = response.section;
-                        const data = response.data;
+                    <canvas id="myBarChart"></canvas>
+                </div>
 
-                        // Create a bar chart for each department
-                        departments.forEach((department, index) => {
-                            createBarChart(department, section, data[index], fixedColors[index % fixedColors.length]);
-                        });
-                    },
-                    error: function(error) {
-                        console.error('Error fetching data:', error);
+                <?php
+                // Fetch data from the users table, grouping by department
+                $query = "SELECT department, section, has_voted FROM users WHERE type = 2";
+
+                $result = mysqli_query($conn, $query);
+
+                // Initialize an associative array to store data grouped by department and section name
+                $departmentData = array();
+
+                // Populate the array with data from the database
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $department = $row['department'];
+                    $section = $row['section'];
+                    $voted = $row['has_voted'];
+
+                    // Create an array for the department if it doesn't exist
+                    if (!isset($departmentData[$department])) {
+                        $departmentData[$department] = array();
                     }
-                });
 
-                function createBarChart(department, section, data, color) {
-                    // Create a unique canvas for each department
-                    const canvasId = 'barChart_' + department.replace(/\s/g, ''); // Remove spaces from department name
-                    $('#bar-container').append(`<canvas id="${canvasId}" class="bar-chart"></canvas>`);
+                    // Add section and CSS score to the department array
+                    if (!isset($departmentData[$department][$section])) {
+                        $departmentData[$department][$section] = array('section' => $section, 'has_voted' => 0);
+                    }
 
-                    const ctx = document.getElementById(canvasId).getContext('2d');
+                    // Increment the has_voted count for the section
+                    $departmentData[$department][$section]['has_voted'] += $voted;
+                }
+                ?>
 
-                    new Chart(ctx, {
-                        type: 'bar',
-                        data: {
-                            labels: section,
-                            datasets: [{
+                <script>
+                    // Your data from MySQL or any other source
+                    var departmentData = <?php echo json_encode($departmentData); ?>;
+
+                    // Create an array to store the datasets
+                    var datasets = [];
+
+                    // Iterate through the departmentData and create datasets for each department
+                    for (var department in departmentData) {
+                        if (departmentData.hasOwnProperty(department)) {
+                            var departmentDataset = {
                                 label: department,
-                                data: data,
-                                backgroundColor: color,
-                            }],
-                        },
-                        options: {
-                            scales: {
-                                y: {
-                                    beginAtZero: true,
-                                    max: 100,
-                                    ticks: {
-                                        stepSize: 25,
-                                        callback: function(value) {
-                                            return value.toFixed(0);
+                                data: Object.values(departmentData[department]).map(item => item.has_voted),
+                                backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                                borderColor: 'rgba(75, 192, 192, 1)', // Border color remains the same
+                                borderWidth: 1
+                            };
+
+                            datasets.push(departmentDataset);
+                        }
+                    }
+
+                    // ...
+
+                    // Create a bar chart for each department
+                    datasets.forEach(function(departmentDataset) {
+                        var ctx = document.createElement('canvas').getContext('2d');
+
+                        document.getElementById('bar-container').appendChild(ctx.canvas); // Append canvas to chart-container
+
+                        new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: Object.values(departmentData[departmentDataset.label]).map(item => item.section),
+                                datasets: [departmentDataset]
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        max: 100, // Set your desired maximum value
+                                        ticks: {
+                                            stepSize: 25, // Set your desired step size
+                                            callback: function(value) {
+                                                return value.toFixed(0);
+                                            }
                                         }
                                     }
                                 }
-                            },
-                            plugins: {
-                                title: {
-                                    display: true,
-                                    text: department,
-                                    position: 'top',
-                                    font: {
-                                        size: 16,
-                                    },
-                                },
-                            },
-                        }
+                            }
+                        });
                     });
-                }
-            });
-        </script>
+                </script>
+
+
+            </div>
+        </div>
     </div>
-
-
 
 </body>
 
