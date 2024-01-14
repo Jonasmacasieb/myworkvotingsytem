@@ -82,8 +82,10 @@ include 'db_connect.php';
 									<center><?php echo $row['username'] ?></center>
 								</td>
 
-								<td>
-									<center> <?php echo $row['online_status'] ?></center>
+								<td data-user-id="<?php echo $row['id']; ?>">
+									<center id="online_status_<?php echo $row['id']; ?>">
+										<?php echo $row['online_status']; ?>
+									</center>
 								</td>
 								<td>
 									<center> <?php echo $row['type'] ?></center>
@@ -206,7 +208,7 @@ include 'db_connect.php';
 			});
 		}
 
-		// Call updateOnlineStatus for each user every 5 seconds
+		// Call updateOnlineStatus for each user every 1 seconds
 		function refreshOnlineStatus() {
 			$('[data-user-id]').each(function() {
 				var user_id = $(this).data('user-id');
@@ -214,7 +216,7 @@ include 'db_connect.php';
 			});
 		}
 
-		setInterval(refreshOnlineStatus, 5000);
+		setInterval(refreshOnlineStatus, 1000);
 	</script>
 
 

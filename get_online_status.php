@@ -7,7 +7,12 @@ if (isset($_GET['id'])) {
 
     if ($result) {
         $row = $result->fetch_assoc();
-        echo $row['online_status'];
+
+        // Set the color based on online status
+        $color = ($row['online_status'] == 'online') ? 'green' : 'red';
+
+        // Apply the color to the HTML output
+        echo "<div style='color: $color;'>{$row['online_status']}</div>";
     } else {
         echo "Error fetching online status";
     }
