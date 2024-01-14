@@ -66,10 +66,12 @@
 </head>
 
 <body>
+    <br><br>
     <div class="col-lg-12">
         <div class="card">
             <div class="card-body">
                 <div class="container-fluid">
+
                     <div id="chart-container" style=" float: left;">
                         <canvas id="pieChart"></canvas>
                     </div>
@@ -145,7 +147,6 @@
 
     <br>
     <!-- bar chart new task -->
-
     <div class="col-lg-12">
         <div class="card">
             <div class="card-body">

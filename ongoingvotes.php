@@ -118,6 +118,12 @@
         font-size: 15px;
         color: #000;
     }
+
+    .unsettled {
+        position: relative;
+        top: 20px;
+
+    }
 </style>
 
 <div class="containe-fluid">
@@ -161,33 +167,35 @@
 
             </div>
 
-            <div class="p-4">
-                <div class="card col-md-4 offset-2 bg-danger mx-auto d-flex align-items-center ">
+            <div class="unsettled">
+                <div class="p-4">
+                    <div class="card col-md-4 offset-2 bg-danger mx-auto d-flex align-items-center ">
 
 
-                    <div class="card-body text-white">
-                        <h4><b>Unsettled</b></h4>
-                        <hr>
-                        <span class="card-icon"><i class="fa fa-user-tie"></i></span>
-                        <h3 class="text-right"><b><?php
+                        <div class="card-body text-white">
+                            <h4><b>Unsettled</b></h4>
+                            <hr>
+                            <span class="card-icon"><i class="fa fa-user-tie"></i></span>
+                            <h3 class="text-right"><b><?php
 
-                                                    $usersWhoVoted = $conn->query('SELECT COUNT(DISTINCT user_id) AS num_users FROM votes WHERE voting_id = ' . $id)->fetch_assoc()['num_users'];
-
-
-                                                    $totalUsersOfType2 = $conn->query('SELECT COUNT(*) AS num_users FROM users WHERE type = 2 ')->fetch_assoc()['num_users'];
+                                                        $usersWhoVoted = $conn->query('SELECT COUNT(DISTINCT user_id) AS num_users FROM votes WHERE voting_id = ' . $id)->fetch_assoc()['num_users'];
 
 
-                                                    $pendingVotes = max(0, $totalUsersOfType2 - $usersWhoVoted);
+                                                        $totalUsersOfType2 = $conn->query('SELECT COUNT(*) AS num_users FROM users WHERE type = 2 ')->fetch_assoc()['num_users'];
 
 
-                                                    echo $pendingVotes;
-                                                    ?>
-                            </b></h3>
+                                                        $pendingVotes = max(0, $totalUsersOfType2 - $usersWhoVoted);
+
+
+                                                        echo $pendingVotes;
+                                                        ?>
+                                </b></h3>
+                        </div>
                     </div>
                 </div>
+
+
             </div>
-
-
 
         </div>
     </div>
