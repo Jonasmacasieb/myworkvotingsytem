@@ -146,6 +146,7 @@
         $myvotes = $conn->query("SELECT opt_txt FROM voting_opt WHERE id IN (SELECT voting_opt_id FROM votes WHERE voting_id = '" . $id . "')");
 
         ?>
+
         <table id="printableTable" border="1" class="table table-bordered table-hover">
             <h3>Voter's Logs</h3>
             <thead>
@@ -161,16 +162,17 @@
                 <?php while ($rowUser = $mycats->fetch_assoc()) : ?>
                     <tr>
                         <td><?php echo $rowUser['username']; ?></td>
-                        <?php $rowVote = $myvotes->fetch_assoc(); ?>
-                        <td><?php echo $rowVote['opt_txt']; ?></td>
+                        <?php
+                        $myvotes->data_seek(0); // Reset the pointer to the beginning of $myvotes
+                        while ($rowVote = $myvotes->fetch_assoc()) : ?>
+                            <td><?php echo $rowVote['opt_txt']; ?></td>
+                        <?php endwhile; ?>
                     </tr>
                 <?php endwhile; ?>
 
-
-
-
             </tbody>
         </table>
+
 
         <script>
             $('#print').click(function() {
