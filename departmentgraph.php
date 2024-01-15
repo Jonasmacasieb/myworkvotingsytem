@@ -14,8 +14,9 @@
         }
 
         #bar-container {
+            position: relative;
             margin: auto;
-            width: 80%;
+            width: 90%;
         }
 
         .card {
@@ -26,14 +27,16 @@
 
         .serif-font {
             font-family: serif;
-            font-size: 35px;
+            font-size: 40px;
         }
 
         .gradient-background {
             background: linear-gradient(to bottom, #ff7e5f, #feb47b);
             color: white;
-            padding: 10px;
+            padding: 20px;
             border-radius: 10px;
+            position: relative;
+            top: 20px;
         }
     </style>
     <?php include('db_connect.php'); ?>
@@ -150,8 +153,15 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-body">
-                <div id="bar-container">
 
+
+                <div class="title">
+                    <div class="text-center gradient-background">
+                        <h3 class="serif-font"><b>Departments and Section</b></h3>
+
+                    </div>
+                </div>
+                <div id="bar-container">
                     <canvas id="myBarChart"></canvas>
                 </div>
 
@@ -235,6 +245,7 @@
                                     }
                                 }
                             }
+
                         });
                     });
                 </script>
