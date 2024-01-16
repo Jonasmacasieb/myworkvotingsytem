@@ -161,14 +161,15 @@
 
                 <?php while ($rowUser = $mycats->fetch_assoc()) : ?>
                     <tr>
-                        <td><?php echo $rowUser['username']; ?></td>
+                        <td class="text-center"><?php echo $rowUser['username']; ?></td>
                         <?php
                         $myvotes->data_seek(0); // Reset the pointer to the beginning of $myvotes
                         while ($rowVote = $myvotes->fetch_assoc()) : ?>
-                            <td><?php echo $rowVote['opt_txt']; ?></td>
+                            <td class="text-center"><?php echo $rowVote['opt_txt']; ?></td>
                         <?php endwhile; ?>
                     </tr>
                 <?php endwhile; ?>
+
 
             </tbody>
         </table>

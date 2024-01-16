@@ -63,9 +63,6 @@
     echo 'var data = ' . json_encode($data) . ';';
     echo '</script>';
     ?>
-
-
-
 </head>
 
 <body>
@@ -146,19 +143,14 @@
         </div>
     </div>
 
-
-
     <br>
     <!-- bar chart new task -->
     <div class="col-lg-12">
         <div class="card">
             <div class="card-body">
-
-
                 <div class="title">
                     <div class="text-center gradient-background">
                         <h3 class="serif-font"><b>Departments and Section</b></h3>
-
                     </div>
                 </div>
                 <div id="bar-container">
@@ -196,28 +188,37 @@
                 ?>
 
                 <script>
+                    function getRandomColor(count) {
+                        // Define a fixed set of colors
+                        const fixedColors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#c0c0c0', '#808080', '#800000', '#008000'];
+
+                        // Return a slice of the fixed colors array based on the count
+                        return fixedColors.slice(0, count);
+                    }
+
                     // Your data from MySQL or any other source
                     var departmentData = <?php echo json_encode($departmentData); ?>;
 
                     // Create an array to store the datasets
                     var datasets = [];
 
+                    // Get random colors based on the number of departments
+                    var randomColors = getRandomColor(Object.keys(departmentData).length);
+
                     // Iterate through the departmentData and create datasets for each department
-                    for (var department in departmentData) {
-                        if (departmentData.hasOwnProperty(department)) {
+                    Object.keys(departmentData)
+                        .sort() // Sort the departments alphabetically
+                        .forEach(function(department, index) {
                             var departmentDataset = {
                                 label: department,
                                 data: Object.values(departmentData[department]).map(item => item.has_voted),
-                                backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                                backgroundColor: randomColors[index], // Use random color
                                 borderColor: 'rgba(75, 192, 192, 1)', // Border color remains the same
                                 borderWidth: 1
                             };
 
                             datasets.push(departmentDataset);
-                        }
-                    }
-
-                    // ...
+                        });
 
                     // Create a bar chart for each department
                     datasets.forEach(function(departmentDataset) {
@@ -245,15 +246,13 @@
                                     }
                                 }
                             }
-
                         });
                     });
                 </script>
-
-
             </div>
         </div>
     </div>
+
 
 </body>
 
