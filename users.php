@@ -208,7 +208,7 @@ include 'db_connect.php';
 			});
 		}
 
-		// Call updateOnlineStatus for each user every 1 seconds
+		// Call updateOnlineStatus for each user every 0,5 seconds
 		function refreshOnlineStatus() {
 			$('[data-user-id]').each(function() {
 				var user_id = $(this).data('user-id');
@@ -216,7 +216,7 @@ include 'db_connect.php';
 			});
 		}
 
-		setInterval(refreshOnlineStatus, 1000);
+		setInterval(refreshOnlineStatus, 500);
 	</script>
 
 
