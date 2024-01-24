@@ -61,6 +61,6 @@ def recognize_faces(le, recognizer):
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    dataset_output_dir = r"D:\onedrive\Desktop\train_face\images"
+    dataset_output_dir = r"C:\xampp\htdocs\github\myworkvotingsytem\train_face\images"
     label_encoder, face_recognizer = train_face_recognizer(dataset_output_dir)
     recognize_faces(label_encoder, face_recognizer)

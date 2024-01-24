@@ -4,7 +4,7 @@ import numpy as np
 import os
 
 
-def generate_dataset(output_dir, num_samples_per_person=10):
+def generate_dataset(output_dir, num_samples_per_person=15):
     face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
     webcam = cv2.VideoCapture(0)
 
@@ -41,5 +41,5 @@ def generate_dataset(output_dir, num_samples_per_person=10):
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    dataset_output_dir = r"D:\onedrive\Desktop\train_face\images"
+    dataset_output_dir = r"C:\xampp\htdocs\github\myworkvotingsytem\train_face\images"
     generate_dataset(dataset_output_dir)
