@@ -27,15 +27,13 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Admin Voting Logs</title>
+        <title>Voter's Logs</title>
         <style>
             /* Add any additional styles here */
             @media print {
                 body * {
                     visibility: hidden;
-
                 }
-
 
                 #printableTable,
                 #printableTable * {
@@ -48,20 +46,49 @@
                     top: 0;
                 }
 
-                /* Logo and name styles for print view */
+                /* Additional styles to improve table printing */
+                table {
+                    border-collapse: collapse;
+                    width: 100%;
+                }
 
+                th,
+                td {
+                    border: 1px solid #ddd;
+                    padding: 8px;
+                    text-align: left;
+                }
 
+                th {
+                    background-color: #f2f2f2;
+                    font-weight: bold;
+                    text-align: center;
+                }
+
+                /* Custom design for printed table */
+                th.print-header,
+                td.print-data {
+                    background-color: #f9f9f9;
+                    font-weight: bold;
+                }
+
+                th.print-header {
+                    border-bottom: 2px solid #ddd;
+                }
+
+                td.print-data {
+                    border-bottom: 1px solid #ddd;
+                }
+
+                /* Custom design for table caption */
+                caption {
+                    margin-bottom: 10px;
+                    font-style: italic;
+                    color: #666;
+                }
             }
 
-            .printtb {
-
-                background-color: blue;
-            }
-
-
-
-
-            /* CSS */
+            /* Additional styles for non-print view */
             .button-15 {
                 background-image: linear-gradient(#42A1EC, #0070C9);
                 border: 1px solid #0077CC;
@@ -80,7 +107,6 @@
                 overflow: visible;
                 padding: 4px 15px;
                 text-align: center;
-
                 user-select: none;
                 -webkit-user-select: none;
                 touch-action: manipulation;
@@ -111,105 +137,68 @@
 
             th {
                 text-align: center;
-
-
-
                 background-color: #ffcc80;
                 color: #000;
-                /* font-weight: bold; */
-                border: 1px solid #ffcc80;
                 font-size: 15px;
             }
         </style>
     </head>
 
     <body>
-
-
         <br>
-
-        <!-- Add a print button -->
-        <!-- <a href="design.php">view</a> -->
-        <button class="float-right text-white mt-3 button-15" id="print"> <i class="fa fa-print  " style="color: black;"></i> Print</button>
+        <button class="float-right text-white mt-3 button-15" id="printButton"> <i class="fa fa-print" style="color: black;"></i> Print</button>
         <br><br><br>
 
+        <h2>Voters Logs</h2>
         <?php
+        include('db_connect.php');
         $cats = $conn->query("SELECT * FROM category_list WHERE id IN (SELECT category_id FROM voting_opt WHERE voting_id = '" . $id . "')");
-
-        ?>
-
-        <?php
-        $mycats = $conn->query("SELECT username FROM users WHERE id IN (SELECT user_id FROM votes WHERE voting_id = '" . $id . "')");
-
-        ?>
-        <?php
-        $myvotes = $conn->query("SELECT opt_txt FROM voting_opt WHERE id IN (SELECT voting_opt_id FROM votes WHERE voting_id = '" . $id . "')");
-
         ?>
 
         <table id="printableTable" border="1" class="table table-bordered table-hover">
-            <h3>Voter's Logs</h3>
+
             <thead>
-                <tr class="tr1">
-                    <th>School ID</th>
+                <tr class="tr">
+                    <th class="print-header">School ID</th> <!-- Print header style -->
                     <?php while ($row = $cats->fetch_assoc()) : ?>
-                        <th><?php echo $row['category']; ?></th>
+                        <th class="print-header"><?php echo $row['category']; ?></th>
                     <?php endwhile; ?>
                 </tr>
             </thead>
             <tbody>
-
-                <?php while ($rowUser = $mycats->fetch_assoc()) : ?>
+                <?php
+                // Fetching users who voted
+                $mycats = $conn->query("SELECT username, id FROM users WHERE id IN (SELECT user_id FROM votes WHERE voting_id = '" . $id . "')");
+                while ($rowUser = $mycats->fetch_assoc()) : ?>
                     <tr>
-                        <td class="text-center"><?php echo $rowUser['username']; ?></td>
+                        <td class="text-center print-data"><?php echo $rowUser['username']; ?></td> <!-- Print data style -->
                         <?php
-                        $myvotes->data_seek(0); // Reset the pointer to the beginning of $myvotes
-                        while ($rowVote = $myvotes->fetch_assoc()) : ?>
-                            <td class="text-center"><?php echo $rowVote['opt_txt']; ?></td>
+                        // Fetching votes for each user
+                        $user_id = $rowUser['id'];
+                        $userVotes = $conn->query("SELECT opt_txt FROM voting_opt WHERE id IN (SELECT voting_opt_id FROM votes WHERE voting_id = '" . $id . "' AND user_id = '$user_id')");
+                        // Displaying votes in separate columns
+                        while ($rowVote = $userVotes->fetch_assoc()) : ?>
+                            <td class="text-center print-data"><?php echo $rowVote['opt_txt']; ?></td>
                         <?php endwhile; ?>
                     </tr>
                 <?php endwhile; ?>
-
-
             </tbody>
         </table>
 
-
         <script>
-            $('#print').click(function() {
-                // start_load();
-                var printableContent = $('#printableTable').html();
-                // Make an AJAX request to fetch the content of design.php
-                $.ajax({
-                    url: 'design.php',
-                    method: 'GET',
-                    success: function(data) {
-                        // Create a new window and write the content to it
-                        var nw = window.open("", "_blank", "width=800,height=600");
-                        nw.document.write('<html><head><title>Voting Management System</title></head><body>');
-                        nw.document.write(data); // Use the fetched content
-                        nw.document.write(printableContent);
-                        nw.document.write('</body></html>');
-                        nw.document.close();
-
-                        // Print the new window
-                        nw.print();
-
-                        // Close the new window after a delay
-                        // setTimeout(function() {s
-                        //     nw.close();
-                        //     end_load();
-                        // }, 1000);
-                    },
-                    error: function() {
-                        alert('Error fetching content from design.php');
-                        end_load();
-                    }
+            document.getElementById("printButton").addEventListener("click", function() {
+                // Hide all elements except the table before printing
+                var elementsToHide = document.querySelectorAll("body > :not(#printableTable)");
+                elementsToHide.forEach(function(element) {
+                    element.style.visibility = "hidden";
+                });
+                window.print();
+                // Restore visibility after printing
+                elementsToHide.forEach(function(element) {
+                    element.style.visibility = "visible";
                 });
             });
         </script>
-
-
     </body>
 
     </html>

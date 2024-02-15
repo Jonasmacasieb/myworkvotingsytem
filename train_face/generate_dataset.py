@@ -1,23 +1,27 @@
-# generate_dataset.py
 import cv2
-import numpy as np
 import os
+import tkinter as tk
+from tkinter import messagebox
 
+def show_message():
+    root = tk.Tk()
+    root.withdraw()
+    messagebox.showinfo("Capture Completed", "Image capture completed.")
+    root.destroy()
 
-def generate_dataset(output_dir, num_samples_per_person=15):
+def generate_dataset(output_dir, persons, num_samples_per_person=20):
     face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
     webcam = cv2.VideoCapture(0)
 
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
-
-    for person_id in range(1, 6):  # Assume 5 people for this example
-        person_dir = os.path.join(output_dir, f"person_{person_id}")
+    for person_name in persons:
+        person_dir = os.path.join(output_dir, person_name)
 
         if not os.path.exists(person_dir):
             os.makedirs(person_dir)
 
-        for sample_num in range(1, num_samples_per_person + 1):
+        sample_num = 1
+
+        while sample_num <= num_samples_per_person:
             ret, frame = webcam.read()
             gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
@@ -25,21 +29,34 @@ def generate_dataset(output_dir, num_samples_per_person=15):
 
             for (x, y, w, h) in faces:
                 face_roi = gray_frame[y:y+h, x:x+w]
-                cv2.imwrite(os.path.join(person_dir, f"sample_{sample_num}.png"), face_roi)
+                face_roi_resized = cv2.resize(face_roi, (100, 100))
+                cv2.imwrite(os.path.join(person_dir, f"sample_{sample_num}.png"), face_roi_resized)
 
+            cv2.putText(frame, f"Captured {sample_num}/{num_samples_per_person} samples for {person_name}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
             cv2.imshow('Collecting Samples', frame)
-            cv2.waitKey(500)
 
             if sample_num == num_samples_per_person:
-                # Display the last captured image
-                cv2.imshow('Last Captured Image', frame)
-                cv2.waitKey(0)  # Wait indefinitely until a key is pressed
                 cv2.destroyAllWindows()
-                return
+                show_message()
+                cv2.waitKey(2000)
+                break
+
+            key = cv2.waitKey(500)
+
+            if key == 27:
+                break
+
+            sample_num += 1
 
     webcam.release()
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
     dataset_output_dir = r"C:\xampp\htdocs\github\myworkvotingsytem\train_face\images"
-    generate_dataset(dataset_output_dir)
+    num_samples_per_person = 20
+
+    # Retrieve the list of user names from the PHP script (assuming it is sent as a POST parameter)
+    import sys
+    user_names = sys.argv[1:] if len(sys.argv) > 1 else ["default_student"]
+
+    generate_dataset(dataset_output_dir, user_names, num_samples_per_person)

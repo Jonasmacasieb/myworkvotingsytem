@@ -1,10 +1,11 @@
-# face_recognition.py
 import cv2
 import numpy as np
-import os 
+import os
 from sklearn import preprocessing
+from generate_dataset import generate_dataset, show_message
+import subprocess
 
-def train_face_recognizer(dataset_path):
+def train_face_recognizer(dataset_path, target_size=(100, 100)):
     face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
     recognizer = cv2.face.LBPHFaceRecognizer_create()
 
@@ -12,24 +13,36 @@ def train_face_recognizer(dataset_path):
     faces = []
     persons = []
 
+    le = preprocessing.LabelEncoder()  # Instantiate LabelEncoder here
+
     for person_id, person_name in enumerate(os.listdir(dataset_path), start=1):
         person_dir = os.path.join(dataset_path, person_name)
-        
+
         for filename in os.listdir(person_dir):
             img_path = os.path.join(person_dir, filename)
             img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
-            
-            faces.append(img)
-            labels.append(person_id)
-            persons.append(person_name)
 
-    le = preprocessing.LabelEncoder()
-    le.fit(persons)
-    labels = le.transform(persons)
+            if img is not None:
+                # Resize the image to the target size
+                img = cv2.resize(img, target_size)
+
+                faces.append(img)
+                labels.append(person_id)
+                persons.append(person_name)
+
+    print("Number of loaded images:", len(faces))  # Print the number of loaded images
+
+    if len(faces) == 0:
+        print("No images loaded. Exiting.")
+        return None, None
+
+    # Convert labels to integers before transforming with LabelEncoder
+    labels = le.fit_transform(list(map(str, labels)))
 
     recognizer.train(faces, np.array(labels))
     recognizer.save("face_recognizer.xml")
 
+    print("Training completed successfully.")
     return le, recognizer
 
 def recognize_faces(le, recognizer):
@@ -50,7 +63,13 @@ def recognize_faces(le, recognizer):
             confidence_percent = int(100 * (1 - confidence / 300))
 
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-            cv2.putText(frame, f"{person_name} ({confidence_percent}%)", (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+            text = f"{person_name} ({confidence_percent}%)"
+            cv2.putText(frame, text, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+
+            # Check confidence level and open PHP file if needed
+            if 70 <= confidence_percent <= 100:
+                php_file_path = r"C:\xampp\htdocs\github\myworkvotingsytem\voting.php"
+                subprocess.run(["php", php_file_path])
 
         cv2.imshow('Face Recognition', frame)
 
@@ -62,5 +81,6 @@ def recognize_faces(le, recognizer):
 
 if __name__ == "__main__":
     dataset_output_dir = r"C:\xampp\htdocs\github\myworkvotingsytem\train_face\images"
+    generate_dataset.show_message = show_message  # Assign the function to the imported show_message
     label_encoder, face_recognizer = train_face_recognizer(dataset_output_dir)
     recognize_faces(label_encoder, face_recognizer)

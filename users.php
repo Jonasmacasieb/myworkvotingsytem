@@ -88,7 +88,7 @@ include 'db_connect.php';
 									</center>
 								</td>
 								<td>
-									<center> <?php echo $row['type'] ?></center>
+									<center> <?php echo ($row['type'] == 1) ? 'Admin' : 'Student'; ?></center>
 								</td>
 								<td>
 									<center>
@@ -164,7 +164,8 @@ include 'db_connect.php';
 									</center>
 								</td>
 								<td>
-									<center> <?php echo $row['type'] ?></center>
+									<center> <?php echo ($row['type'] == 1) ? 'Admin' : 'Student'; ?></center>
+
 								</td>
 								<td>
 									<center>
