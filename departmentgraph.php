@@ -40,17 +40,18 @@
         }
     </style>
     <?php include('db_connect.php'); ?>
-
     <?php
     // Assuming you have a connection to the database, e.g., $conn
 
     $sql = "SELECT department, COUNT(*) as vote_count FROM users WHERE type = 2 GROUP BY department";
     $result = $conn->query($sql);
 
+    $totalUsers = 0;
     $data = [];
 
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
+            $totalUsers += $row['vote_count'];
             $data[] = [
                 'department' => $row['department'],
                 'vote_count' => $row['vote_count'],
@@ -58,11 +59,17 @@
         }
     }
 
+    // Calculate the percentage for each department
+    foreach ($data as &$entry) {
+        $entry['percentage'] = ($entry['vote_count'] / $totalUsers) * 100;
+    }
+
     // Output the JSON-encoded data
     echo '<script>';
     echo 'var data = ' . json_encode($data) . ';';
     echo '</script>';
     ?>
+
 </head>
 
 <body>
@@ -104,22 +111,36 @@
                                 data: {
                                     labels: data.map(entry => entry.department),
                                     datasets: [{
-                                        data: data.map(entry => entry.vote_count),
+                                        data: data.map(entry => entry.percentage),
                                         backgroundColor: pieChartColors,
                                     }],
                                 },
                                 options: {
+                                    tooltips: {
+                                        callbacks: {
+                                            label: function(tooltipItem, data) {
+                                                var dataset = data.datasets[tooltipItem.datasetIndex];
+                                                var total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
+                                                    return previousValue + currentValue;
+                                                });
+                                                var currentValue = dataset.data[tooltipItem.index];
+                                                var percentage = ((currentValue / total) * 100).toFixed(2);
+                                                return data.labels[tooltipItem.index] + ": " + percentage + "%";
+                                            }
+                                        }
+                                    },
                                     legend: {
                                         display: false, // Hide default legend
                                     },
                                 },
                             });
-
-                            // Create custom legend
-                            const legendContainer = document.getElementById("legend-container");
-                            const legendHTML = createLegendHTML(data);
-                            legendContainer.innerHTML = legendHTML;
                         }
+
+                        // Create custom legend
+                        const legendContainer = document.getElementById("legend-container");
+                        const legendHTML = createLegendHTML(data);
+                        legendContainer.innerHTML = legendHTML;
+
 
                         function createLegendHTML(data) {
                             let legendHTML = '<ul>';
@@ -144,7 +165,61 @@
     </div>
 
     <br>
-    <!-- bar chart new task -->
+    <?php
+
+    $department_query = "SELECT DISTINCT department FROM users WHERE type = 2";
+    $department_result = $conn->query($department_query);
+
+    // Initialize an array to store department names
+    $all_departments = array();
+
+    // Populate the array with department names
+    while ($row = $department_result->fetch_assoc()) {
+        $all_departments[] = $row['department'];
+    }
+
+    $voting_query = "SELECT * FROM voting_list WHERE is_default = 1";
+    $voting_result = $conn->query($voting_query);
+
+    // Check if a default voting category exists
+    if ($voting_result && $voting_result->num_rows > 0) {
+        $default_voting = $voting_result->fetch_assoc();
+        $default_voting_id = $default_voting['id'];
+
+
+        // Retrieve votes for the default category, counting distinct user IDs
+        $default_votes_query = "SELECT department, section, COUNT(DISTINCT v.user_id) as has_voted 
+        FROM users u 
+        INNER JOIN votes v ON u.id = v.user_id 
+        WHERE v.voting_id = $default_voting_id 
+        GROUP BY department, section";
+
+        $default_votes_result = $conn->query($default_votes_query);
+
+        // Initialize an array to store department data
+        $departmentData = array();
+
+        // Populate department data with votes for the default category
+        while ($row = $default_votes_result->fetch_assoc()) {
+            $department = $row['department'];
+            $section = $row['section'];
+            $has_voted = $row['has_voted'];
+
+            if (!isset($departmentData[$department])) {
+                $departmentData[$department] = array();
+            }
+
+            $departmentData[$department][$section] = array('section' => $section, 'has_voted' => $has_voted);
+        }
+        foreach ($all_departments as $department_name) {
+            if (!isset($departmentData[$department_name])) {
+                $departmentData[$department_name] = array();
+            }
+        }
+    }
+    ?>
+
+    <!-- Bar chart section -->
     <div class="col-lg-12">
         <div class="card">
             <div class="card-body">
@@ -156,38 +231,9 @@
                 <div id="bar-container">
                     <canvas id="myBarChart"></canvas>
                 </div>
-
-                <?php
-                // Fetch data from the users table, grouping by department
-                $query = "SELECT department, section, has_voted FROM users WHERE type = 2";
-
-                $result = mysqli_query($conn, $query);
-
-                // Initialize an associative array to store data grouped by department and section name
-                $departmentData = array();
-
-                // Populate the array with data from the database
-                while ($row = mysqli_fetch_assoc($result)) {
-                    $department = $row['department'];
-                    $section = $row['section'];
-                    $voted = $row['has_voted'];
-
-                    // Create an array for the department if it doesn't exist
-                    if (!isset($departmentData[$department])) {
-                        $departmentData[$department] = array();
-                    }
-
-                    // Add section and CSS score to the department array
-                    if (!isset($departmentData[$department][$section])) {
-                        $departmentData[$department][$section] = array('section' => $section, 'has_voted' => 0);
-                    }
-
-                    // Increment the has_voted count for the section
-                    $departmentData[$department][$section]['has_voted'] += $voted;
-                }
-                ?>
-
                 <script>
+                    // JavaScript code for generating the bar chart
+                    // Define a function to get random colors
                     function getRandomColor(count) {
                         // Define a fixed set of colors
                         const fixedColors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#c0c0c0', '#808080', '#800000', '#008000'];
@@ -196,7 +242,7 @@
                         return fixedColors.slice(0, count);
                     }
 
-                    // Your data from MySQL or any other source
+                    // Your data from PHP
                     var departmentData = <?php echo json_encode($departmentData); ?>;
 
                     // Create an array to store the datasets
@@ -252,6 +298,8 @@
             </div>
         </div>
     </div>
+
+
 
 
 </body>

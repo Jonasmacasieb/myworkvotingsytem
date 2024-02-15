@@ -342,6 +342,7 @@ class Action
 	function update_voting()
 	{
 		extract($_POST);
+		$this->db->query("UPDATE users SET has_voted = 0");
 		$this->db->query("UPDATE voting_list set is_default = 0 where id !=" . $id);
 		$update = $this->db->query("UPDATE voting_list set is_default = 1 where id= " . $id);
 		if ($update)
