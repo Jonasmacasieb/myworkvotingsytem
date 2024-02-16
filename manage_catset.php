@@ -7,30 +7,30 @@
 			<input type="hidden" name="id" value="<?php echo $_GET['id'] ?>">
 			<div class="form-group">
 				<label for="" class="control-label">Maximum number of Selection</label>
-				<input type="number" class="form-control" name="max_selection" value="<?php echo $_GET['max'] ?>">
+				<input type="number" class="form-control" name="max_selection" id="max_selection" value="<?php echo $_GET['max'] ?>" min="1">
+
 			</div>
 		</form>
 	</div>
 </div>
 
 <script type="text/javascript">
-	
-	$('#manage-settings').submit(function(e){
+	$('#manage-settings').submit(function(e) {
 		e.preventDefault()
 		start_load()
 		$.ajax({
-			url:'ajax.php?action=save_settings',
-		    method: 'POST',
-		    data: $(this).serialize(),
-			error:err=>{
+			url: 'ajax.php?action=save_settings',
+			method: 'POST',
+			data: $(this).serialize(),
+			error: err => {
 				console.log(err)
 			},
-			success:function(resp){
-				if(resp == 1){
-					alert_toast('Data successfully updated.','success')
-					setTimeout(function(){
+			success: function(resp) {
+				if (resp == 1) {
+					alert_toast('Data successfully updated.', 'success')
+					setTimeout(function() {
 						location.reload()
-					},1500)
+					}, 1500)
 				}
 			}
 		})

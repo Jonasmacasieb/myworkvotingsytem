@@ -14,7 +14,7 @@
   if (!isset($_SESSION['login_id']))
     header('location:trylogin.php');
   include('./header.php');
-  // include('./auth.php'); 
+
   ?>
 
 </head>

@@ -410,20 +410,29 @@ class Action
 		$set = 0;
 		foreach ($opt_id as $k => $val) {
 			foreach ($val as $key => $v) {
-
 				$data = " voting_id = $voting_id ";
 				$data .= ", category_id = $k ";
 				$data .= ", user_id = '" . $_SESSION['login_id'] . "' ";
 				$data .= ", voting_opt_id = $v ";
 				// echo $data.'<br>';
-				$save[] = $this->db->query("INSERT INTO votes set " . $data);
+				$save[] = $this->db->query("INSERT INTO votes SET " . $data);
 				$set++;
 			}
 		}
 
-		if (isset($save) && count($save) == $set)
-			return 1;
+		// Update has_voted column for the user
+		$this->db->query("UPDATE users SET has_voted = 1 WHERE id = '" . $_SESSION['login_id'] . "'");
+
+		// If there are no votes saved, return 0 or handle accordingly
+		if (empty($save)) {
+			return 0;
+		}
+
+		// If all votes are saved successfully, return 1
+		return 1;
 	}
+
+
 
 	// function save_time(){
 	// 	extract($_POST);

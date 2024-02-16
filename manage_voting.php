@@ -71,7 +71,7 @@ while ($row = $settings->fetch_assoc()) {
 							</b></small>
 						<!-- new time -->
 						<small><b><br>
-								<?php echo $time_duration; ?> hours
+								<?php echo $time_duration; ?> ours
 							</b></small>
 					</div>
 

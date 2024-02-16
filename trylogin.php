@@ -206,7 +206,7 @@ left:110px;
       <!-- <h2>for Perpetual Help College of Pangasinan</h2> -->
       <form id="login-form" class="fl" action="" method="post">
         <input class="itpw" type="text" name="username" placeholder="School ID"><br>
-        <!-- <input class="itpw" type="password" name="password" placeholder="Password"><br> -->
+
         <input class="its" type="submit" name="login" value="Proceed">
       </form>
 
