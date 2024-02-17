@@ -1,7 +1,6 @@
 <?php
 include('db_connect.php');
 
-// Start or resume the session
 
 
 // Check if the user is logged in
@@ -105,10 +104,14 @@ while ($row = $settings->fetch_assoc()) {
 
 						<div class="text-center gradient-background">
 							<h3 class="serif-font"><b><?php echo $title ?></b></h3>
-							<small class="serif-description"><b><?php echo $description; ?></b></small>
+							<small class="serif-description1"><b><?php echo $description; ?></b></small>
 							<br>
 							<small class="serif-description"><b><?php echo $time_duration; ?></b></small>
+
 						</div>
+
+
+
 
 						<?php
 						$cats = $conn->query("SELECT * FROM category_list where id in (SELECT category_id from voting_opt where voting_id = '" . $id . "' )");
