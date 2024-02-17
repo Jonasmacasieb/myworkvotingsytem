@@ -46,11 +46,12 @@ while ($row = $settings->fetch_assoc()) {
 <style>
 	.candidate {
 		margin: auto;
-		width: 16vw;
+		width: 100%;
+		/* Adjust width for mobile devices */
 		padding: 10px;
 		cursor: pointer;
 		border-radius: 3px;
-		margin-bottom: 1em
+		margin-bottom: 1em;
 	}
 
 	.candidate:hover {
@@ -60,7 +61,8 @@ while ($row = $settings->fetch_assoc()) {
 
 	.candidate img {
 		height: 14vh;
-		width: 8vw;
+		width: 100%;
+		/* Adjust image width for mobile devices */
 		margin: auto;
 	}
 
@@ -69,11 +71,11 @@ while ($row = $settings->fetch_assoc()) {
 		right: 0;
 		top: -1em;
 		z-index: 10;
-		display: none
+		display: none;
 	}
 
 	span.rem_btn.active {
-		display: block
+		display: block;
 	}
 
 	.gradient-background {
@@ -85,15 +87,74 @@ while ($row = $settings->fetch_assoc()) {
 
 	.serif-font {
 		font-family: serif;
-		font-size: 40px;
+		font-size: 24px;
+		/* Adjust title font size for mobile devices */
 	}
 
+	.serif-description1,
 	.serif-description {
 		font-family: sans-serif;
-		font-size: 15px;
+		font-size: 12px;
+		/* Adjust description font size for mobile devices */
 		color: #000;
 	}
+
+	/* Media queries for responsiveness */
+	@media (min-width: 576px) {
+		.candidate {
+			width: 48%;
+			/* Adjust width for medium-sized screens */
+		}
+
+		.serif-font {
+			font-size: 32px;
+			/* Adjust title font size for medium-sized screens */
+		}
+
+		.serif-description1,
+		.serif-description {
+			font-size: 14px;
+			/* Adjust description font size for medium-sized screens */
+		}
+
+		button.btn-primary {
+			width: 100%;
+			/* Set button width to 100% of its container */
+			max-width: 120px;
+			/* Set maximum width for the button */
+			margin: 0 auto;
+			/* Center the button horizontally */
+		}
+
+	}
+
+	/* Additional media query for smaller tablets */
+	@media (min-width: 768px) {
+		.candidate {
+			width: 22%;
+			height: 32%;
+
+			/* Adjust width for larger screens */
+		}
+
+		.serif-font {
+			font-size: 28px;
+			/* Adjust title font size for medium-sized screens */
+		}
+
+		.serif-description1,
+		.serif-description {
+			font-size: 14px;
+			/* Adjust description font size for medium-sized screens */
+		}
+
+		button.btn-primary {
+			width: 200px;
+			/* Adjust button width for medium-sized screens */
+		}
+	}
 </style>
+
 <div class="container-fluid">
 	<div class="col-lg-12">
 		<div class="card">
@@ -155,7 +216,7 @@ while ($row = $settings->fetch_assoc()) {
 					</div>
 					<hr>
 
-					<center><button class="btn btn-primary" style="width: 400px;; ">Submit</button></center>
+					<center><button class="btn btn-primary ">Submit</button></center>
 				</form>
 			</div>
 		</div>
