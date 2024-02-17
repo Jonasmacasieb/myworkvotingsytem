@@ -33,20 +33,10 @@
         <form action="" id="manage-user" enctype="multipart/form-data">
             <input type="hidden" name="id" value="<?php echo isset($meta['id']) ? $meta['id'] : '' ?>">
 
-            <!-- Add a new input for picture upload -->
             <div class="form-group">
                 <label for="picture">Profile Picture</label>
                 <input type="file" name="picture" id="picture" class="form-control-file">
             </div>
-
-            <div style="display: flex; justify-content: flex-end;">
-                <div class="face">
-                    <input type="button" value="Face Registration" id="faceRegistrationButton">
-
-                </div>  
-
-            </div>
-
 
             <div class="form-group">
                 <label for="name">Name</label>
@@ -58,85 +48,90 @@
                 <input type="text" name="username" id="username" class="form-control" value="<?php echo isset($meta['username']) ? $meta['username'] : '' ?>" required>
             </div>
 
-            <div class="form-group" id="section">
-                <label for="department">Section and Year</label>
-                <select name="section" id="section" class="form-control" required>
-                    <option value="4-1" <?php echo (isset($meta['department']) && $meta['department'] === 'CCS') ? 'selected' : ''; ?>> 4-1</option>
-                    <option value="4-2" <?php echo (isset($meta['department']) && $meta['department'] === 'CRIMINOLOGY') ? 'selected' : ''; ?>>4-2</option>
-                    <option value="Acountancy" <?php echo (isset($meta['department']) && $meta['department'] === 'CRIMINOLOGY') ? 'selected' : ''; ?>>4-3</option>
-                    <option value="Human Resources" <?php echo (isset($meta['department']) && $meta['department'] === 'CRIMINOLOGY') ? 'selected' : ''; ?>>3-1</option>
-                    <option value="Marketing" <?php echo (isset($meta['department']) && $meta['department'] === 'CRIMINOLOGY') ? 'selected' : ''; ?>>3-1</option>
-                    <option value="Tourism" <?php echo (isset($meta['department']) && $meta['department'] === 'CRIMINOLOGY') ? 'selected' : ''; ?>>3-1</option>
-                    <option value="Alied Health" <?php echo (isset($meta['department']) && $meta['department'] === 'CRIMINOLOGY') ? 'selected' : ''; ?>>3-1</option>
-                    <option value="Midwifery" <?php echo (isset($meta['department']) && $meta['department'] === 'CRIMINOLOGY') ? 'selected' : ''; ?>>2-1 </option>
-
-                </select>
-            </div>
-            <div class="form-group" id="course">
-                <label for="department">Course </label>
-                <select name="course" id="course" class="form-control" required>
-                    <option value="CCS" <?php echo (isset($meta['department']) && $meta['department'] === 'CCS') ? 'selected' : ''; ?>> CSS</option>
-                    <option value="CRIMINOLOGY" <?php echo (isset($meta['department']) && $meta['department'] === 'CRIMINOLOGY') ? 'selected' : ''; ?>>CRIM</option>
-                    <option value="Acountancy" <?php echo (isset($meta['department']) && $meta['department'] === 'CRIMINOLOGY') ? 'selected' : ''; ?>>Accountacy</option>
-                    <option value="Human Resources" <?php echo (isset($meta['department']) && $meta['department'] === 'CRIMINOLOGY') ? 'selected' : ''; ?>>3-1</option>
-                    <option value="Marketing" <?php echo (isset($meta['department']) && $meta['department'] === 'CRIMINOLOGY') ? 'selected' : ''; ?>>3-1</option>
-                    <option value="Tourism" <?php echo (isset($meta['department']) && $meta['department'] === 'CRIMINOLOGY') ? 'selected' : ''; ?>>3-1</option>
-                    <option value="Alied Health" <?php echo (isset($meta['department']) && $meta['department'] === 'CRIMINOLOGY') ? 'selected' : ''; ?>>3-1</option>
-                    <option value="Midwifery" <?php echo (isset($meta['department']) && $meta['department'] === 'CRIMINOLOGY') ? 'selected' : ''; ?>>2-1 </option>
-
-                </select>
-            </div>
             <div class="form-group" id="department-group">
                 <label for="department">Department</label>
                 <select name="department" id="department" class="form-control" required>
-                    <option value="BS Information Technology" <?php echo (isset($meta['department']) && $meta['department'] === 'CCS') ? 'selected' : ''; ?>> BS Information Technology </option>
-                    <option value="CRIMINOLOGY" <?php echo (isset($meta['department']) && $meta['department'] === 'CRIMINOLOGY') ? 'selected' : ''; ?>>BS Criminilogy</option>
-                    <option value="Acountancy" <?php echo (isset($meta['department']) && $meta['department'] === 'CRIMINOLOGY') ? 'selected' : ''; ?>>BS Accountancy</option>
-                    <option value="Human Resources" <?php echo (isset($meta['department']) && $meta['department'] === 'CRIMINOLOGY') ? 'selected' : ''; ?>>Human Resources</option>
-                    <option value="Marketing" <?php echo (isset($meta['department']) && $meta['department'] === 'CRIMINOLOGY') ? 'selected' : ''; ?>>Marketing</option>
-                    <option value="Tourism" <?php echo (isset($meta['department']) && $meta['department'] === 'CRIMINOLOGY') ? 'selected' : ''; ?>>Tourism</option>
-                    <option value="Alied Health" <?php echo (isset($meta['department']) && $meta['department'] === 'CRIMINOLOGY') ? 'selected' : ''; ?>>Alied Health Department</option>
-                    <option value="Midwifery" <?php echo (isset($meta['department']) && $meta['department'] === 'CRIMINOLOGY') ? 'selected' : ''; ?>>College of Midwifery </option>
+                    <option value="">Select Department</option>
+                    <option value="BS Information Technology">BS Information Technology</option>
+                    <option value="CRIMINOLOGY">BS Criminology</option>
+                    <option value="Accountancy">BS Accountancy</option>
+                    <!-- Add other department options here -->
+                </select>
+            </div>
 
+            <div class="form-group" id="course-group">
+                <label for="course">Course</label>
+                <select name="course" id="course" class="form-control" required>
+                    <option value="">Select Course</option>
+                    <!-- Course options will be dynamically populated based on the selected department -->
+                </select>
+            </div>
+
+            <div class="form-group" id="section-group">
+                <label for="section">Section and Year</label>
+                <select name="section" id="section" class="form-control" required>
+                    <option value="">Select Section</option>
+                    <!-- Section options will be dynamically populated based on the selected department -->
                 </select>
             </div>
 
             <div class="form-group">
-                <label for="type">user</label>
+                <label for="type">User Type</label>
                 <select name="type" id="type" class="custom-select">
                     <option value="2" <?php echo isset($meta['type']) && $meta['type'] == 2 ? 'selected' : '' ?>>Students</option>
-
-
+                    <!-- Add other user type options here -->
                 </select>
+            </div>
         </form>
-    </div>
 
 
+        <script>
+            $(document).ready(function() {
+                // Function to populate course options based on selected department
+                $('#department').change(function() {
+                    var department = $(this).val();
+                    $('#course').empty();
+                    // Populate course options based on the selected department
+                    switch (department) {
+                        case 'BS Information Technology':
+                            $('#course').append('<option value="IT">Information Technology</option>');
+                            $('#course').append('<option value="CS">Computer Science</option>');
+                            break;
+                        case 'CRIMINOLOGY':
+                            $('#course').append('<option value="Criminology">Criminology</option>');
+                            break;
+                        case 'Accountancy':
+                            $('#course').append('<option value="Accounting">Accounting</option>');
+                            break;
+                            // Add cases for other departments as needed
+                        default:
+                            $('#course').append('<option value="">Select Course</option>');
+                    }
+                });
 
-    <script>
-        $(document).ready(function() {
-            // Hide the password field initially
-            $('#password-group').hide();
-
-            // Show/hide password and department fields based on the selected user type
-            function toggleFields() {
-                if ($('#type').val() == 1) { // Admin
-                    $('#password-group').show();
-                    $('#department-group').hide();
-                } else if ($('#type').val() == 2) { // User
-                    $('#password-group').hide();
-                    $('#department-group').show();
-                } else {
-                    $('#password-group, #department-group').hide();
-                }
-            }
-
-            // Call the function on page load
-            toggleFields();
-
-            // Show/hide fields when the user type changes
-            $('#type').change(function() {
-                toggleFields();
+                // Function to populate section options based on selected department
+                $('#department').change(function() {
+                    var department = $(this).val();
+                    $('#section').empty();
+                    // Populate section options based on the selected department
+                    switch (department) {
+                        case 'BS Information Technology':
+                            $('#section').append('<option value="4-1">4-1</option>');
+                            $('#section').append('<option value="4-2">4-2</option>');
+                            break;
+                        case 'CRIMINOLOGY':
+                            $('#section').append('<option value="4-1">4-1</option>');
+                            $('#section').append('<option value="4-2">4-2</option>');
+                            break;
+                        case 'Accountancy':
+                            $('#section').append('<option value="4-1">4-1</option>');
+                            $('#section').append('<option value="4-2">4-2</option>');
+                            break;
+                            // Add cases for other departments as needed
+                        default:
+                            $('#section').append('<option value="">Select Section</option>');
+                    }
+                });
             });
 
             // Form submission code remains unchanged
@@ -161,38 +156,6 @@
                     }
                 });
             });
+        </script>
 
-            $('#faceRegistrationButton').click(function() {
-                var userName = $('input[name="username"]').val(); // Correctly select the school ID input field
-                $('#black-space').addClass('gray-background');
-
-                $.ajax({
-                    url: 'ajax.php',
-                    method: 'POST',
-                    data: {
-                        action: 'face_registration',
-                        userName: userName // Send the school ID to the Python script
-                    },
-                    success: function(resp) {
-                        console.log(resp);
-                        $('#black-space').removeClass('gray-background');
-                    }
-                });
-
-                // Add any additional logic you need after initiating face registration
-            });
-
-            // Hide the Face Registration button initially
-            $('.face').hide();
-
-            // Show/hide the Face Registration button based on School ID input
-            $('#username').on('input', function() {
-                var schoolID = $(this).val().trim(); // Trim any leading or trailing spaces
-                if (schoolID.length > 0) {
-                    $('.face').show();
-                } else {
-                    $('.face').hide();
-                }
-            });
-        });
-    </script>
+    </div>

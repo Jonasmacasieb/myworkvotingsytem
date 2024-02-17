@@ -26,6 +26,12 @@ if ($action == 'save_user') {
 	if ($save)
 		echo $save;
 }
+
+if ($action == 'save_admin') {
+	$save = $crud->save_user();
+	if ($save)
+		echo $save;
+}
 if ($action == 'save_category') {
 	$save = $crud->save_category();
 	if ($save)

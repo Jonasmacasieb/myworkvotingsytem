@@ -216,6 +216,45 @@ class Action
 	}
 
 
+	function save_admin()
+	{
+		extract($_POST);
+
+		// Handle file upload
+		$picture_path = '';
+		if (isset($_FILES['picture']) && $_FILES['picture']['error'] == UPLOAD_ERR_OK) {
+			$upload_dir = 'image/'; // Assuming the 'image' folder is in the current directory
+			$uploaded_file = $upload_dir . basename($_FILES['picture']['name']);
+			move_uploaded_file($_FILES['picture']['tmp_name'], $uploaded_file);
+			$picture_path = $uploaded_file;
+		}
+
+		$data = " name = '$name' ";
+		$data .= ", username = '$username' ";
+		$data .= ", picture_path = '$picture_path' "; // Save the file path to the database
+
+		$data .= ", type = '$type' ";
+
+		// Conditionally include the password only if the user type is "admin" and password is not empty
+		if ($type == 1 && !empty($password)) {
+			$hashed_password = md5($password);
+			$data .= ", password = '$hashed_password' "; // Store the hashed password
+		}
+
+		if (empty($id)) {
+			$save = $this->db->query("INSERT INTO users SET " . $data); // Fix: Use SET instead of SET
+		} else {
+			$save = $this->db->query("UPDATE users SET " . $data . " WHERE id = " . $id); // Fix: Use SET instead of SET
+		}
+
+		if ($save) {
+			return 1;
+		}
+	}
+
+
+
+
 
 	// function save_user(){
 	// 	extract($_POST);
