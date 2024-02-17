@@ -1,32 +1,24 @@
 <?php
-
 include('db_connect.php');
+
+
+
+// Check if the user is logged in
+if (!isset($_SESSION['login_id'])) {
+	// Redirect to login page or any appropriate page
+	header('Location: login.php');
+	exit();
+}
 
 $user_id = $_SESSION['login_id'];
 
-// Check if the user has already voted in the current session
-if (isset($_SESSION['has_voted']) && $_SESSION['has_voted'] == 1) {
-	header('Location: view_vote.php');
-	exit(); // Ensure that the script stops execution after the redirection
-}
-
-
-
-// Update the 'has_voted' status for the user in the database
-$conn->query("UPDATE users SET has_voted = 1 WHERE id = $user_id");
-
-// Set a session variable indicating that the user has voted
-$_SESSION['has_voted'] = 1;
-
-// Continue with the rest of your code for voting	
 
 
 ?>
 
 
+
 <?php
-
-
 $voting = $conn->query("SELECT * FROM voting_list where  is_default = 1 ");
 foreach ($voting->fetch_array() as $key => $value) {
 	$$key = $value;
@@ -49,18 +41,17 @@ $settings = $conn->query("SELECT * FROM voting_cat_settings where voting_id=" . 
 while ($row = $settings->fetch_assoc()) {
 	$set_arr[$row['category_id']] = $row;
 }
-
-
 ?>
 
 <style>
 	.candidate {
 		margin: auto;
-		width: 16vw;
+		width: 100%;
+		/* Adjust width for mobile devices */
 		padding: 10px;
 		cursor: pointer;
 		border-radius: 3px;
-		margin-bottom: 1em
+		margin-bottom: 1em;
 	}
 
 	.candidate:hover {
@@ -70,7 +61,8 @@ while ($row = $settings->fetch_assoc()) {
 
 	.candidate img {
 		height: 14vh;
-		width: 8vw;
+		width: 100%;
+		/* Adjust image width for mobile devices */
 		margin: auto;
 	}
 
@@ -79,11 +71,11 @@ while ($row = $settings->fetch_assoc()) {
 		right: 0;
 		top: -1em;
 		z-index: 10;
-		display: none
+		display: none;
 	}
 
 	span.rem_btn.active {
-		display: block
+		display: block;
 	}
 
 	.gradient-background {
@@ -95,15 +87,74 @@ while ($row = $settings->fetch_assoc()) {
 
 	.serif-font {
 		font-family: serif;
-		font-size: 40px;
+		font-size: 24px;
+		/* Adjust title font size for mobile devices */
 	}
 
+	.serif-description1,
 	.serif-description {
 		font-family: sans-serif;
-		font-size: 15px;
+		font-size: 12px;
+		/* Adjust description font size for mobile devices */
 		color: #000;
 	}
+
+	/* Media queries for responsiveness */
+	@media (min-width: 576px) {
+		.candidate {
+			width: 48%;
+			/* Adjust width for medium-sized screens */
+		}
+
+		.serif-font {
+			font-size: 32px;
+			/* Adjust title font size for medium-sized screens */
+		}
+
+		.serif-description1,
+		.serif-description {
+			font-size: 14px;
+			/* Adjust description font size for medium-sized screens */
+		}
+
+		button.btn-primary {
+			width: 100%;
+			/* Set button width to 100% of its container */
+			max-width: 120px;
+			/* Set maximum width for the button */
+			margin: 0 auto;
+			/* Center the button horizontally */
+		}
+
+	}
+
+	/* Additional media query for smaller tablets */
+	@media (min-width: 768px) {
+		.candidate {
+			width: 22%;
+			height: 32%;
+
+			/* Adjust width for larger screens */
+		}
+
+		.serif-font {
+			font-size: 28px;
+			/* Adjust title font size for medium-sized screens */
+		}
+
+		.serif-description1,
+		.serif-description {
+			font-size: 14px;
+			/* Adjust description font size for medium-sized screens */
+		}
+
+		button.btn-primary {
+			width: 200px;
+			/* Adjust button width for medium-sized screens */
+		}
+	}
 </style>
+
 <div class="container-fluid">
 	<div class="col-lg-12">
 		<div class="card">
@@ -114,10 +165,13 @@ while ($row = $settings->fetch_assoc()) {
 
 						<div class="text-center gradient-background">
 							<h3 class="serif-font"><b><?php echo $title ?></b></h3>
-							<small class="serif-description"><b><?php echo $description; ?></b></small>
+							<small class="serif-description1"><b><?php echo $description; ?></b></small>
 							<br>
 							<small class="serif-description"><b><?php echo $time_duration; ?></b></small>
+
 						</div>
+
+
 
 
 						<?php
@@ -138,7 +192,7 @@ while ($row = $settings->fetch_assoc()) {
 								<?php foreach ($opt_arr[$row['id']] as $candidate) {
 								?>
 									<div class="candidate" style="position: relative;" data-cid='<?php echo $row['id'] ?>' data-max="<?php echo $set_arr[$row['id']]['max_selection'] ?>" data-name="<?php echo $row['category'] ?>">
-										<input type="radio" name="opt_id[<?php echo $row['id'] ?>][]" value="<?php echo $candidate['id'] ?>" style="display: none">
+										<input type="checkbox" name="opt_id[<?php echo $row['id'] ?>][]" value="<?php echo $candidate['id'] ?>" style="display: none">
 										<span class="rem_btn">
 											<label for="" class="btn btn-primary"><span class="fa fa-circle"></span></label>
 										</span>
@@ -162,7 +216,7 @@ while ($row = $settings->fetch_assoc()) {
 					</div>
 					<hr>
 
-					<center><button class="btn btn-primary" style="width: 400px;; ">Sumbit</button></center>
+					<center><button class="btn btn-primary ">Submit</button></center>
 				</form>
 			</div>
 		</div>
@@ -171,35 +225,50 @@ while ($row = $settings->fetch_assoc()) {
 
 <script>
 	$('.candidate').click(function() {
-		var chk = $(this).find('input[type="radio"]').prop("checked");
+		var maxSelection = parseInt($(this).attr('data-max'));
+		var checkedCount = $("input[name='opt_id[" + $(this).attr('data-cid') + "][]']:checked").length;
 
-		if (chk == true) {
-			$(this).find('input[type="radio"]').prop("checked", false)
+		if ($(this).find('input[type="checkbox"]').prop("checked")) {
+			$(this).find('input[type="checkbox"]').prop("checked", false);
 		} else {
-			var arr_chk = $("input[name='opt_id[" + $(this).attr('data-cid') + "][]']:checked").length
-			if ($(this).attr('data-max') == 1) {
-				$("input[name='opt_id[" + $(this).attr('data-cid') + "][]']").prop("checked", false)
-				$(this).find('input[type="radio"]').prop("checked", true)
-			} else {
-				if (arr_chk >= $(this).attr('data-max')) {
-					alert_toast("Choose only " + $(this).attr('data-max') + " for " + $(this).attr('data-name') + " category", "warning")
-					return false;
-				}
+			if (checkedCount >= maxSelection) {
+				alert_toast("Choose only " + maxSelection + " for " + $(this).attr('data-name') + " category", "warning");
+				return false;
 			}
-			$(this).find('input[type="radio"]').prop("checked", true)
+			$(this).find('input[type="checkbox"]').prop("checked", true);
 		}
+
+		updateRemBtnStatus();
+	});
+
+	function updateRemBtnStatus() {
 		$('.candidate').each(function() {
-			if ($(this).find('input[type="radio"]').prop("checked") == true) {
-				$(this).find('.rem_btn').addClass('active')
+			if ($(this).find('input[type="checkbox"]').prop("checked")) {
+				$(this).find('.rem_btn').addClass('active');
 			} else {
-				$(this).find('.rem_btn').removeClass('active')
+				$(this).find('.rem_btn').removeClass('active');
 			}
-		})
+		});
+	}
 
+	// Rest of your JavaScript code...
 
-	})
 	$('#manage-vote').submit(function(e) {
-		e.preventDefault()
+		e.preventDefault();
+		var selected = false;
+		// Check if at least one option is selected
+		$('.candidate input[type="radio"]').each(function() {
+			if ($(this).is(':checked')) {
+				selected = true;
+				return false; // Exit the loop early if any option is selected
+			}
+		});
+
+		if (!selected) {
+			alert_toast("Please choose at least one candidate.");
+			return;
+		}
+
 		start_load();
 		$.ajax({
 			url: 'ajax.php?action=submit_vote',
@@ -207,14 +276,12 @@ while ($row = $settings->fetch_assoc()) {
 			data: $(this).serialize(),
 			success: function(resp) {
 				if (resp == 1) {
-					alert_toast("Vote success fully submitted");
+					alert_toast("Vote successfully submitted");
 					setTimeout(function() {
-						// location.reload()
 						window.location.href = 'already_voted.php';
 					}, 1500);
-
 				}
 			}
-		})
-	})
+		});
+	});
 </script>

@@ -104,11 +104,6 @@ if ($action == 'delete_user') {
 
 
 
-if ($action == 'face_registration') {
-	// Execute the Python script
-	$pythonScriptPath = 'C:/xampp/htdocs/github/myworkvotingsytem/train_face/generate_dataset.py';
-	$output = shell_exec("python $pythonScriptPath 2>&1");
-	echo $output;
-}
+
 
 ob_end_flush();
