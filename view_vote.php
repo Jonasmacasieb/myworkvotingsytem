@@ -3,7 +3,6 @@
 include('db_connect.php');
 session_start(); // Start the session
 
-include('topbaruser.php');
 // Check if $_SESSION['login_id'] is set before using it
 if (isset($_SESSION['login_id'])) {
     $login_id = $_SESSION['login_id'];
@@ -44,6 +43,11 @@ while ($row = $opts->fetch_assoc()) {
 
 
     <style>
+        .body {
+            margin: 0;
+            padding: 0;
+        }
+
         .candidate {
             margin: auto;
             width: 100%;
@@ -104,8 +108,36 @@ while ($row = $opts->fetch_assoc()) {
             height: auto;
         }
 
+        @media (min-width: 992px) {
+            .container-fluid {
+                max-width: 1140px;
+                /* Adjust container width for larger screens */
+            }
+
+            .col-md-12 {
+                width: 100%;
+                /* Full width for larger screens */
+            }
+
+            .candidate {
+                width: 22%;
+                /* Adjust candidate width for larger screens */
+            }
+
+            .serif-font {
+                font-size: 42px;
+                /* Increase title font size for larger screens */
+            }
+
+            .serif-description1,
+            .serif-description {
+                font-size: 18px;
+                /* Increase description font size for larger screens */
+            }
+        }
+
         /* Media queries for responsiveness */
-        @media (min-width: 576px) {
+        @media (mix-width: 768px) {
             .candidate {
                 width: 48%;
                 /* Adjust width for medium-sized screens */
@@ -122,14 +154,6 @@ while ($row = $opts->fetch_assoc()) {
                 /* Adjust description font size for medium-sized screens */
             }
 
-            button.btn-primary {
-                width: 100%;
-                /* Set button width to 100% of its container */
-                max-width: 120px;
-                /* Set maximum width for the button */
-                margin: 0 auto;
-                /* Center the button horizontally */
-            }
 
             .item img {
                 max-width: 100%;
@@ -142,15 +166,19 @@ while ($row = $opts->fetch_assoc()) {
         /* Additional media query for smaller tablets */
     </style>
 </head>
-<br><br><br>
+<?php include('topbaruser.php')
+
+?>
+<br><br><br><br>
 <div class="container-fluid">
     <div class="col-lg-12">
-        <div class="row">
-            <!-- <div class="col-md-12">
-                <a class="btn btn-primary btn-sm  col-md-2 float-right" href="voting.php?page=home">View Poll</a>
-            </div> -->
-        </div>
+
         <div class="card">
+            <div class="row">
+                <div class="col-md-12">
+                    <a class="btn btn-primary btn-sm  col-md-2 " href="ongoingvotesuser.php?page=home">Click to View On Going Votes</a>
+                </div>
+            </div>
             <div class="card-body">
                 <div class="col-lg-12">
                     <div class="text-center gradient-background">

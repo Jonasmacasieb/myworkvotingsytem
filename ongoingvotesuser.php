@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -153,7 +157,9 @@
         }
     </style>
 </head>
-<?php include('topbar.php') ?>
+<?php include('topbar.php')
+
+?>
 <div class="containe-fluid">
     <?php include('db_connect.php');
     $voting = $conn->query("SELECT * FROM voting_list where  is_default = 1 ");
@@ -175,65 +181,10 @@
     }
 
     ?>
-    <br><br><br>
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card col-md-4 offset-2 bg-info float-left">
-                <div class="card-body text-white">
-                    <h4><b>Voters</b></h4>
-                    <hr>
-                    <span class="card-icon"><i class="fa fa-users"></i></span>
-                    <h3 class="text-right"><b><?php echo $conn->query('SELECT * FROM users where type = 2 ')->num_rows ?></b></h3>
-                </div>
-            </div>
-            <div class="card col-md-4 offset-2 bg-primary ml-4 float-left">
-                <div class="card-body text-white">
-                    <h4><b>Voted</b></h4>
-                    <hr>
-                    <span class="card-icon"><i class="fa fa-edit"></i></span>
-                    <h3 class="text-right"><b><?php echo $conn->query('SELECT distinct(user_id) FROM votes where voting_id = ' . $id)->num_rows ?></b></h3>
-                </div>
-
-            </div>
-
-            <div class="unsettled">
-                <div class="p-4">
-                    <div class="card col-md-4 offset-2 bg-danger mx-auto d-flex align-items-center ">
-
-
-                        <div class="card-body text-white">
-
-                            <h4><b>Unsettled</b></h4>
-
-                            <hr>
-                            <span class="card-icon"><i class="fa fa-user-tie"></i></span>
-                            <h3 class="text-right"><b><?php
-
-                                                        $usersWhoVoted = $conn->query('SELECT COUNT(DISTINCT user_id) AS num_users FROM votes WHERE voting_id = ' . $id)->fetch_assoc()['num_users'];
-
-
-                                                        $totalUsersOfType2 = $conn->query('SELECT COUNT(*) AS num_users FROM users WHERE type = 2 ')->fetch_assoc()['num_users'];
-
-
-                                                        $pendingVotes = max(0, $totalUsersOfType2 - $usersWhoVoted);
-
-
-                                                        echo $pendingVotes;
-                                                        ?>
-                                </b></h3>
-                        </div>
-                    </div>
-                </div>
-
-
-            </div>
-
-        </div>
-    </div>
 
 
 
-    <br><br><br>
+    <br><br>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -250,6 +201,11 @@
         <div class="row mt-3 ml-3 mr-3">
             <div class="col-lg-12">
                 <div class="card">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a class="btn btn-primary btn-sm  col-md-2 " href="view_vote.php?page=home"> Click to View Votes</a>
+                        </div>
+                    </div>
                     <div class="card-body">
 
 
