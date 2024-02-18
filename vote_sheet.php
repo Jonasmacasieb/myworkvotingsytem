@@ -264,10 +264,6 @@ while ($row = $settings->fetch_assoc()) {
 			}
 		});
 
-		if (!selected) {
-			alert_toast("Please choose at least one candidate.");
-			return;
-		}
 
 		start_load();
 		$.ajax({

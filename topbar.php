@@ -38,7 +38,7 @@
     }
 
     /* Media queries for responsiveness */
-    @media (max-width: 576px) {
+    @media (max-width:768px) {
         .logo img {
             width: 50px;
             position: absolute;
@@ -89,6 +89,28 @@
 
 
 
+    }
+
+    @media (min-width: 992px) {
+        .logo img {
+            width: 70px;
+            height: 60px;
+        }
+
+        .perps {
+            font-size: 24px;
+            margin-top: 15px;
+        }
+
+        .adlogout {
+            font-size: 24px;
+            margin-top: 15px;
+        }
+
+        .float-right img {
+            width: 60px;
+            height: 60px;
+        }
     }
 </style>
 
