@@ -111,11 +111,15 @@
         <h1>Already Voted</h1>
         <p>You have already cast your vote. Thank you!</p>
         <a href="ajax.php?action=logout" class="adlogout"><?php echo isset($_SESSION['login_name']) ? $_SESSION['login_name'] . ' Ok' : 'Ok'; ?></a>
+        <br>
+
         <div class="link">
             <a href="view_vote.php" class="view-vote">View Vote</a>
+
         </div>
+        <br>
         <div class="link">
-            <a href="ongoingvotes.php" class="ongoing-votes">On Going Votes</a>
+            <a href="ongoingvotesuser.php" class="ongoing-votes">View On Going Votes</a>
         </div>
     </div>
 </body>

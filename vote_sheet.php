@@ -43,118 +43,139 @@ while ($row = $settings->fetch_assoc()) {
 }
 ?>
 
-<style>
-	.candidate {
-		margin: auto;
-		width: 100%;
-		/* Adjust width for mobile devices */
-		padding: 10px;
-		cursor: pointer;
-		border-radius: 3px;
-		margin-bottom: 1em;
-	}
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	.candidate:hover {
-		background-color: #80808030;
-		box-shadow: 2.5px 3px #00000063;
-	}
-
-	.candidate img {
-		height: 14vh;
-		width: 100%;
-		/* Adjust image width for mobile devices */
-		margin: auto;
-	}
-
-	span.rem_btn {
-		position: absolute;
-		right: 0;
-		top: -1em;
-		z-index: 10;
-		display: none;
-	}
-
-	span.rem_btn.active {
-		display: block;
-	}
-
-	.gradient-background {
-		background: linear-gradient(to bottom, #ff7e5f, #feb47b);
-		color: white;
-		padding: 10px;
-		border-radius: 20px;
-	}
-
-	.serif-font {
-		font-family: serif;
-		font-size: 24px;
-		/* Adjust title font size for mobile devices */
-	}
-
-	.serif-description1,
-	.serif-description {
-		font-family: sans-serif;
-		font-size: 12px;
-		/* Adjust description font size for mobile devices */
-		color: #000;
-	}
-
-	/* Media queries for responsiveness */
-	@media (min-width: 576px) {
+	<style>
 		.candidate {
-			width: 48%;
-			/* Adjust width for medium-sized screens */
-		}
-
-		.serif-font {
-			font-size: 32px;
-			/* Adjust title font size for medium-sized screens */
-		}
-
-		.serif-description1,
-		.serif-description {
-			font-size: 14px;
-			/* Adjust description font size for medium-sized screens */
-		}
-
-		button.btn-primary {
+			margin: auto;
 			width: 100%;
-			/* Set button width to 100% of its container */
-			max-width: 120px;
-			/* Set maximum width for the button */
-			margin: 0 auto;
-			/* Center the button horizontally */
+			/* Adjust width for mobile devices */
+			padding: 10px;
+			cursor: pointer;
+			border-radius: 3px;
+			margin-bottom: 1em;
 		}
 
-	}
+		.candidate:hover {
+			background-color: #80808030;
+			box-shadow: 2.5px 3px #00000063;
+		}
 
-	/* Additional media query for smaller tablets */
-	@media (min-width: 768px) {
-		.candidate {
-			width: 22%;
-			height: 32%;
+		.candidate img {
+			height: 14vh;
+			width: 100%;
+			/* Adjust image width for mobile devices */
+			margin: auto;
+		}
 
-			/* Adjust width for larger screens */
+		span.rem_btn {
+			position: absolute;
+			right: 0;
+			top: -1em;
+			z-index: 10;
+			display: none;
+		}
+
+		span.rem_btn.active {
+			display: block;
+		}
+
+		.gradient-background {
+			background: linear-gradient(to bottom, #ff7e5f, #feb47b);
+			color: white;
+			padding: 10px;
+			border-radius: 20px;
 		}
 
 		.serif-font {
-			font-size: 28px;
-			/* Adjust title font size for medium-sized screens */
+			font-family: serif;
+			font-size: 24px;
+			/* Adjust title font size for mobile devices */
 		}
 
 		.serif-description1,
 		.serif-description {
-			font-size: 14px;
-			/* Adjust description font size for medium-sized screens */
+			font-family: sans-serif;
+			font-size: 12px;
+			/* Adjust description font size for mobile devices */
+			color: #000;
 		}
 
-		button.btn-primary {
-			width: 200px;
-			/* Adjust button width for medium-sized screens */
+		.item img {
+			max-width: 100%;
+			height: auto;
 		}
-	}
-</style>
 
+		/* Media queries for responsiveness */
+		@media (min-width: 576px) {
+			.candidate {
+				width: 48%;
+				/* Adjust width for medium-sized screens */
+			}
+
+			.serif-font {
+				font-size: 32px;
+				/* Adjust title font size for medium-sized screens */
+			}
+
+			.serif-description1,
+			.serif-description {
+				font-size: 14px;
+				/* Adjust description font size for medium-sized screens */
+			}
+
+			button.btn-primary {
+				width: 100%;
+				/* Set button width to 100% of its container */
+				max-width: 120px;
+				/* Set maximum width for the button */
+				margin: 0 auto;
+				/* Center the button horizontally */
+			}
+
+			.item img {
+				max-width: 100%;
+				/* Adjust width for mobile devices */
+				height: auto;
+				/* Allow the height to adjust proportionally to the width */
+			}
+		}
+
+		/* Additional media query for smaller tablets */
+		@media (min-width: 768px) {
+			.candidate {
+				width: 22%;
+				height: 32%;
+
+				/* Adjust width for larger screens */
+			}
+
+			.serif-font {
+				font-size: 28px;
+				/* Adjust title font size for medium-sized screens */
+			}
+
+			.serif-description1,
+			.serif-description {
+				font-size: 14px;
+				/* Adjust description font size for medium-sized screens */
+			}
+
+			button.btn-primary {
+				width: 200px;
+				/* Adjust button width for medium-sized screens */
+			}
+
+			.item img {
+				max-width: 70%;
+				/* Adjust width for larger screens */
+				height: auto;
+				/* Allow the height to adjust proportionally to the width */
+			}
+		}
+	</style>
+</head>
 <div class="container-fluid">
 	<div class="col-lg-12">
 		<div class="card">

@@ -153,6 +153,7 @@
         }
     </style>
 </head>
+<?php include('topbar.php') ?>
 <div class="containe-fluid">
     <?php include('db_connect.php');
     $voting = $conn->query("SELECT * FROM voting_list where  is_default = 1 ");
@@ -174,6 +175,7 @@
     }
 
     ?>
+    <br><br><br>
     <div class="row">
         <div class="col-lg-12">
             <div class="card col-md-4 offset-2 bg-info float-left">
