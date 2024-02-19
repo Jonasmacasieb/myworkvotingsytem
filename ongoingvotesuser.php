@@ -186,8 +186,8 @@ session_start();
 
     <br><br>
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="assetts/vendor/bootstrap/css/bootstrap.min.css">
+    <script src="assets/js/chart.js"></script>
     <style>
         .chart-container {
             position: relative;

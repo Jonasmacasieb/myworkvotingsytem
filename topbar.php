@@ -37,6 +37,11 @@
         border-radius: 50%;
     }
 
+    .navbar {
+        height: 85px;
+
+    }
+
     /* Media queries for responsiveness */
     @media (max-width:768px) {
         .logo img {

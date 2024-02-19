@@ -218,6 +218,8 @@ class Action
 
 	function save_admin()
 	{
+
+
 		extract($_POST);
 
 		// Handle file upload
@@ -229,28 +231,33 @@ class Action
 			$picture_path = $uploaded_file;
 		}
 
+		// Construct the data string for SQL query
 		$data = " name = '$name' ";
 		$data .= ", username = '$username' ";
 		$data .= ", picture_path = '$picture_path' "; // Save the file path to the database
-
 		$data .= ", type = '$type' ";
 
-		// Conditionally include the password only if the user type is "admin" and password is not empty
+		// Check if password is not empty, then hash and add to data
 		if ($type == 1 && !empty($password)) {
 			$hashed_password = md5($password);
-			$data .= ", password = '$hashed_password' "; // Store the hashed password
+			$data .= ", password = '$hashed_password' ";
 		}
 
+		// Perform database query to save or update user data
 		if (empty($id)) {
-			$save = $this->db->query("INSERT INTO users SET " . $data); // Fix: Use SET instead of SET
+			$save = $conn->query("INSERT INTO users SET " . $data); // Use SET for INSERT
 		} else {
-			$save = $this->db->query("UPDATE users SET " . $data . " WHERE id = " . $id); // Fix: Use SET instead of SET
+			$save = $conn->query("UPDATE users SET " . $data . " WHERE id = " . $id); // Use SET for UPDATE
 		}
 
+		// Return success or failure indicator
 		if ($save) {
-			return 1;
+			return 1; // Return 1 for success
+		} else {
+			return 0; // Return 0 for failure
 		}
 	}
+
 
 
 
