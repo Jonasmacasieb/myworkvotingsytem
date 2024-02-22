@@ -149,49 +149,41 @@
         <button class="float-right text-white mt-3 button-15" id="printButton"> <i class="fa fa-print" style="color: black;"></i> Print</button>
         <br><br><br>
 
-        <h2>Logs</h2>
+        <h2>Voters Logs</h2>
         <?php
         include('db_connect.php');
         $cats = $conn->query("SELECT * FROM category_list WHERE id IN (SELECT category_id FROM voting_opt WHERE voting_id = '" . $id . "')");
         ?>
 
         <table id="printableTable" border="1" class="table table-bordered table-hover">
+
             <thead>
                 <tr class="tr">
-                    <th class="print-header">#</th>
-                    <th class="print-header">Date and Time of Login</th>
-                    <th class="print-header">Type</th>
-                    <th class="print-header">Name</th>
+                    <th class="print-header">School ID</th> <!-- Print header style -->
+                    <?php while ($row = $cats->fetch_assoc()) : ?>
+                        <th class="print-header"><?php echo $row['category']; ?></th>
+                    <?php endwhile; ?>
                 </tr>
             </thead>
             <tbody>
                 <?php
-
-                $users = $conn->query("SELECT * FROM users");
-                $i = 1;
-                while ($row = $users->fetch_assoc()) :
-                ?>
+                // Fetching users who voted
+                $mycats = $conn->query("SELECT username, id FROM users WHERE id IN (SELECT user_id FROM votes WHERE voting_id = '" . $id . "')");
+                while ($rowUser = $mycats->fetch_assoc()) : ?>
                     <tr>
-                        <td>
-                            <?php echo $i++ ?>
-                        </td>
-
-                        <td>
-                            <center><?php echo $row['date'] ?></center>
-                        </td>
-                        <td>
-                            <center> <?php echo ($row['type'] == 1) ? 'Admin' : 'Student'; ?></center>
-
-                        </td>
-                        <td>
-                            <center><?php echo $row['name'] ?></center>
-                        </td>
-
+                        <td class="text-center print-data"><?php echo $rowUser['username']; ?></td> <!-- Print data style -->
+                        <?php
+                        // Fetching votes for each user
+                        $user_id = $rowUser['id'];
+                        $userVotes = $conn->query("SELECT opt_txt FROM voting_opt WHERE id IN (SELECT voting_opt_id FROM votes WHERE voting_id = '" . $id . "' AND user_id = '$user_id')");
+                        // Displaying votes in separate columns
+                        while ($rowVote = $userVotes->fetch_assoc()) : ?>
+                            <td class="text-center print-data"><?php echo $rowVote['opt_txt']; ?></td>
+                        <?php endwhile; ?>
                     </tr>
                 <?php endwhile; ?>
             </tbody>
         </table>
-
 
         <script>
             document.getElementById("printButton").addEventListener("click", function() {

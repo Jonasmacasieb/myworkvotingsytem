@@ -92,6 +92,12 @@
             /* Ensure it remains circular */
         }
 
+        #manila-time {
+
+            position: absolute;
+            top: -30px;
+            right: 30px;
+        }
 
 
     }
@@ -116,6 +122,13 @@
             width: 60px;
             height: 60px;
         }
+
+        #manila-time {
+
+            position: absolute;
+            top: 35px;
+            right: 45px;
+        }
     }
 </style>
 
@@ -134,6 +147,7 @@
 
                 <img src="<?php echo isset($_SESSION['login_picture_path']) ? $_SESSION['login_picture_path'] : 'default_image.jpg'; ?>" alt="User Image" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">
 
+                <div id="manila-time" class="float-right text-white mt-3"></div>
                 <div class=" float-right text-white mt-3">
                     <a href="ajax.php?action=logout" class="adlogout"><?php echo isset($_SESSION['login_name']) ? $_SESSION['login_name'] : ''; ?> <i class="fa fa-power-off"></i></a>
                 </div>
@@ -141,3 +155,49 @@
         </div>
     </div>
 </nav>
+
+
+
+<!-- Add an empty element with an id to display the time -->
+
+
+<!-- Add the following JavaScript code at the end of your HTML body -->
+<script>
+    function getManilaTime() {
+
+        var now = new Date();
+
+        // Set the time zone to Manila (Philippines Standard Time)
+        var manilaTime = new Date(now.toLocaleString("en-US", {
+            timeZone: "Asia/Manila"
+        }));
+
+        // Extract hours, minutes, and seconds
+        var hours = manilaTime.getHours();
+        var minutes = manilaTime.getMinutes();
+        var seconds = manilaTime.getSeconds();
+
+        // Determine AM or PM
+        var ampm = hours >= 12 ? 'PM' : 'AM';
+
+        // Convert hours to 12-hour format
+        hours = hours % 12;
+        hours = hours ? hours : 12; // Handle midnight
+
+        // Add leading zeros to minutes and seconds if necessary
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        seconds = seconds < 10 ? '0' + seconds : seconds;
+
+        // Construct the time string with AM/PM indicator
+        var timeString = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
+
+        // Update the content of the element with the id "manila-time"
+        document.getElementById("manila-time").textContent = timeString;
+    }
+
+    // Call the function initially to display the time immediately
+    getManilaTime();
+
+    // Call the function every second to update the time in real-time
+    setInterval(getManilaTime, 1000);
+</script>

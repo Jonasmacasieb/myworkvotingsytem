@@ -88,6 +88,47 @@
 		right: 0;
 		bottom: -.4em;
 	}
+
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		margin-top: 20px;
+	}
+
+	th,
+	td {
+		border: 1px solid #dddddd;
+		padding: 12px;
+		text-align: left;
+	}
+
+	th {
+		background-color: yellow;
+		color: #000;
+		/* Header text color */
+	}
+
+	tr:nth-child(even) {
+		background-color: lightblue;
+		/* Even row background color */
+	}
+
+	tr:nth-child(odd) {
+		background-color: lightyellow;
+		/* Odd row background color */
+	}
+
+
+	td {
+		color: #000;
+		/* Cell text color */
+	}
+
+	h1 {
+		text-align: center;
+		color: #333;
+		/* Heading text color */
+	}
 </style>
 
 <div class="containe-fluid">
@@ -133,11 +174,51 @@
 			</div>
 		</div>
 	</div>
+	<!-- Calendar remainder -->
+	<br>
+	<table>
+		<center>
+			<h1>Events Remainder</h1>
+		</center>
+		<tr>
 
+			<th>
+				<center>Title</center>
+			</th>
+			<th>
+				<center>Date</center>
+			</th>
 
+			<th>
+				<center>Description</center>
+			</th>
+		</tr>
 
+		<tbody>
+			<?php
+			$votes = $conn->query("SELECT * FROM Voting_list");
 
-</div>
-<script>
+			while ($row = $votes->fetch_assoc()) :
+			?>
+				<tr>
 
-</script>
+					<td>
+						<center><?php echo $row['title'] ?></center>
+					</td>
+					<td>
+						<center><?php echo $row['votedate'] ?></center>
+					</td>
+
+					<td>
+						<center><?php echo $row['description'] ?></center>
+					</td>
+
+				</tr>
+			<?php endwhile; ?>
+		</tbody>
+
+	</table>
+
+	<script>
+
+	</script>

@@ -75,12 +75,18 @@
 						</div>
 						<div class="card-body">
 							<div class="form-group">
+								<label class="control-label">Date</label>
+								<input type="date" class="form-control" name="votedate">
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="form-group">
 								<label class="control-label">Time Duration</label>
 								<select name="time_duration" class="form-control">
 									<option value="8:00:00">8 hours</option>
 
 
-									<!-- Add more options as needed -->
+
 								</select>
 							</div>
 						</div>

@@ -45,17 +45,28 @@
 
             <div class="form-group">
                 <label for="username">School ID</label>
-                <input type="text" name="username" id="username" class="form-control" value="<?php echo isset($meta['username']) ? $meta['username'] : '' ?>" required>
+                <input type="text" name="username" id="username" class="form-control" value="<?php echo isset($meta['username']) ? $meta['username'] : '' ?>" maxlength="11" required>
             </div>
+
 
             <div class="form-group" id="department-group">
                 <label for="department">Department</label>
                 <select name="department" id="department" class="form-control" required>
                     <option value="">Select Department</option>
-                    <option value="BS Information Technology">BS Information Technology</option>
-                    <option value="CRIMINOLOGY">BS Criminology</option>
-                    <option value="Accountancy">BS Accountancy</option>
-                    <!-- Add other department options here -->
+                    <option value="BSIT">College of Information Technology</option>
+                    <option value="BSCRIM">College of Criminology</option>
+                    <option value="BSA">College of Accountancy</option>
+                    <option value="BSHM">College of Hospitality Management</option>
+                    <option value="BSTM">College of Tourism Management</option>
+                    <option value="BSAIS">College of Accounting Information System</option>
+                    <option value="BSMA">College of Management Accountancy</option>
+                    <option value="BSBA">College of Business Administration</option>
+                    <option value="BSED">College of Elementary Education</option>
+                    <option value="BSSD">College of Secondary Education</option>
+                    <option value="BSM">College of Midwifery</option>
+                    <option value="BSCNCII">College of Caregiving NC II</option>
+
+
                 </select>
             </div>
 
@@ -93,17 +104,51 @@
                     $('#course').empty();
                     // Populate course options based on the selected department
                     switch (department) {
-                        case 'BS Information Technology':
-                            $('#course').append('<option value="IT">Information Technology</option>');
-                            $('#course').append('<option value="CS">Computer Science</option>');
+                        case 'BSIT':
+                            $('#course').append('<option value="IT">Bachelor of Science in Information Technology</option>');
+
                             break;
-                        case 'CRIMINOLOGY':
-                            $('#course').append('<option value="Criminology">Criminology</option>');
+                        case 'BSCRIM':
+                            $('#course').append('<option value="Criminology">Bachelor of Science in Criminology</option>');
                             break;
-                        case 'Accountancy':
-                            $('#course').append('<option value="Accounting">Accounting</option>');
+                        case 'BSA':
+                            $('#course').append('<option value="Accounting">Bachelor of Science in Accountancy</option>');
                             break;
-                            // Add cases for other departments as needed
+
+                        case 'BSHM':
+                            $('#course').append('<option value="Accounting">Bachelor of Science in Hospitality Management</option>');
+                            break;
+
+                        case 'BSTM':
+                            $('#course').append('<option value="Accounting">Bachelor of Science in Tourism Management</option>');
+                            break;
+
+                        case 'BSAIS':
+                            $('#course').append('<option value="Accounting">Bachelor of Science in Accounting Information System</option>');
+                            break;
+
+                        case 'BSMA':
+                            $('#course').append('<option value="Accounting">Bachelor of Science in Business Administration</option>');
+                            break;
+
+                        case 'BSED':
+                            $('#course').append('<option value="Accounting">Bachelor of Science in Elementary Education</option>');
+                            break;
+
+                        case 'BSSD':
+                            $('#course').append('<option value="Accounting">Bachelor of Science in Secondary Education</option>');
+                            break;
+
+                        case 'BSM':
+                            $('#course').append('<option value="Accounting">Bachelor of Science in Midwifery</option>');
+                            break;
+
+
+                        case 'BSCNCII':
+                            $('#course').append('<option value="Accounting">Bachelor of Science in Caregiving NC II</option>');
+                            break;
+
+
                         default:
                             $('#course').append('<option value="">Select Course</option>');
                     }
@@ -115,19 +160,57 @@
                     $('#section').empty();
                     // Populate section options based on the selected department
                     switch (department) {
-                        case 'BS Information Technology':
+                        case 'BSIT':
                             $('#section').append('<option value="4-1">4-1</option>');
                             $('#section').append('<option value="4-2">4-2</option>');
                             break;
-                        case 'CRIMINOLOGY':
+                        case 'BSCRIM':
                             $('#section').append('<option value="4-1">4-1</option>');
                             $('#section').append('<option value="4-2">4-2</option>');
                             break;
-                        case 'Accountancy':
+                        case 'BSA':
                             $('#section').append('<option value="4-1">4-1</option>');
                             $('#section').append('<option value="4-2">4-2</option>');
                             break;
-                            // Add cases for other departments as needed
+
+                        case 'BSHM':
+                            $('#section').append('<option value="4-1">4-1</option>');
+                            $('#section').append('<option value="4-2">4-2</option>');
+                            break;
+                        case 'BSTM':
+                            $('#section').append('<option value="4-1">4-1</option>');
+                            $('#section').append('<option value="4-2">4-2</option>');
+                            break;
+                        case 'BSAIS':
+                            $('#section').append('<option value="4-1">4-1</option>');
+                            $('#section').append('<option value="4-2">4-2</option>');
+                            break;
+                        case 'BSMA':
+                            $('#section').append('<option value="4-1">4-1</option>');
+                            $('#section').append('<option value="4-2">4-2</option>');
+                            break;
+                        case 'BSBA':
+                            $('#section').append('<option value="4-1">4-1</option>');
+                            $('#section').append('<option value="4-2">4-2</option>');
+                            break;
+                        case 'BSED':
+                            $('#section').append('<option value="4-1">4-1</option>');
+                            $('#section').append('<option value="4-2">4-2</option>');
+                            break;
+
+                        case 'BSSD':
+                            $('#section').append('<option value="4-1">4-1</option>');
+                            $('#section').append('<option value="4-2">4-2</option>');
+                            break;
+                        case 'BSM':
+                            $('#section').append('<option value="4-1">4-1</option>');
+                            $('#section').append('<option value="4-2">4-2</option>');
+                            break;
+                        case 'BSCNCII':
+                            $('#section').append('<option value="4-1">4-1</option>');
+                            $('#section').append('<option value="4-2">4-2</option>');
+                            break;
+
                         default:
                             $('#section').append('<option value="">Select Section</option>');
                     }

@@ -132,7 +132,8 @@ include 'db_connect.php';
 							<th class="text-center">#</th>
 							<th class="text-center">Name</th>
 							<th class="text-center">School ID</th>
-							<th class="text-center">Department</th>
+							<th class="text-center">Course</th>
+							<th class="text-center">Section</th>
 							<th class="text-center">Status</th>
 							<th class="text-center">Roles</th>
 							<th class="text-center">Action</th>
@@ -157,6 +158,9 @@ include 'db_connect.php';
 								</td>
 								<td>
 									<center> <?php echo $row['department'] ?></center>
+								</td>
+								<td>
+									<center> <?php echo $row['section'] ?></center>
 								</td>
 								<td data-user-id="<?php echo $row['id']; ?>">
 									<center id="online_status_<?php echo $row['id']; ?>">

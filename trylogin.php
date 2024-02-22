@@ -23,7 +23,7 @@
     #login {
       width: 100%;
       height: 100vh;
-      background-image: url("perps.jpeg");
+      background-image: url("newbglogo.jpeg");
       background-size: cover;
       background-repeat: no-repeat;
       position: absolute;
@@ -207,7 +207,7 @@
       <h2>Voting Management system with Facial Recognition </h2>
       <!-- <h2>for Perpetual Help College of Pangasinan</h2> -->
       <form id="login-form" class="fl" action="" method="post">
-        <input class="itpw" type="text" name="username" placeholder="School ID"><br>
+        <input class="itpw" type="text" name="username" placeholder="School ID" maxlength=11><br>
         <input class="its" type="submit" name="login" value="Proceed">
       </form>
     </div>

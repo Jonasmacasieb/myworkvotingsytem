@@ -10,7 +10,7 @@
         #chart-container {
             position: relative;
             margin: auto;
-            width: 60%;
+            width: 50%;
         }
 
         #bar-container {
