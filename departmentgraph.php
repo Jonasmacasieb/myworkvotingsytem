@@ -10,7 +10,7 @@
         #chart-container {
             position: relative;
             margin: auto;
-            width: 60%;
+            width: 50%;
         }
 
         #bar-container {
@@ -87,7 +87,7 @@
                         <!-- Legend will be displayed here -->
                     </div>
 
-                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                    <script src="assets/js/chart.js"></script>
                     <script>
                         // Define a global variable to store the colors
                         let pieChartColors = [];

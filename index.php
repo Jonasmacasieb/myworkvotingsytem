@@ -7,7 +7,7 @@
 
   <title>Voting Management System</title>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-w4CUNTSdXoCqQgrEZbUpDEqRdTTrA8JB+JJ+JvhjHM0kPx8C3Ses8RkUlOFrGslDA0fPdFu3UqorBPNTXtMkNQ==" crossorigin="anonymous" />
+  <link rel="stylesheet" href="assets/font-awesome/css/all.min.css" />
 
   <?php
   session_start();

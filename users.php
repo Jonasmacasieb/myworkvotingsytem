@@ -1,7 +1,7 @@
 <?php
 include 'db_connect.php';
 ?>
-<!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> -->
+
 <style>
 	.container-fluid {
 		margin-top: 40px;
@@ -98,7 +98,7 @@ include 'db_connect.php';
 												<span class="sr-only">Toggle Dropdown</span>
 											</button>
 											<div class="dropdown-menu">
-												<button class="dropdown-item edit_user" href="javascript:void(0)" data-id='<?php echo $row['id'] ?>'>Edit</button>
+												<button class="dropdown-item edit_" href="javascript:void(0)" data-id='<?php echo $row['id'] ?>'>Edit</button>
 												<div class="dropdown-divider"></div>
 												<button class="dropdown-item delete_user" href="javascript:void(0)" data-id='<?php echo $row['id'] ?>'>Delete</button>
 
@@ -132,7 +132,8 @@ include 'db_connect.php';
 							<th class="text-center">#</th>
 							<th class="text-center">Name</th>
 							<th class="text-center">School ID</th>
-							<th class="text-center">Department</th>
+							<th class="text-center">Course</th>
+							<th class="text-center">Section</th>
 							<th class="text-center">Status</th>
 							<th class="text-center">Roles</th>
 							<th class="text-center">Action</th>
@@ -157,6 +158,9 @@ include 'db_connect.php';
 								</td>
 								<td>
 									<center> <?php echo $row['department'] ?></center>
+								</td>
+								<td>
+									<center> <?php echo $row['section'] ?></center>
 								</td>
 								<td data-user-id="<?php echo $row['id']; ?>">
 									<center id="online_status_<?php echo $row['id']; ?>">
@@ -228,6 +232,10 @@ include 'db_connect.php';
 		$('#new_admin').click(function() {
 			uni_modal('New admin', 'manage_admin.php')
 		})
+		$('.edit_admin').click(function() {
+			uni_modal('Edit Admin', 'manage_admin.php?id=' + $(this).attr('data-id'))
+		})
+
 		$('.edit_user').click(function() {
 			uni_modal('Edit User', 'manage_user.php?id=' + $(this).attr('data-id'))
 		})

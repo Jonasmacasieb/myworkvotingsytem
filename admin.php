@@ -26,10 +26,11 @@
     #login {
       width: 100%;
       height: 100vh;
-      background-image: url("perps.jpeg");
+      background-image: url("newbglogo.jpeg");
       background-size: cover;
       background-repeat: no-repeat;
       position: absolute;
+
     }
 
     .center {

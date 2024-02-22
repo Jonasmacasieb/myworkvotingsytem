@@ -38,7 +38,8 @@ class Action
 			// Update online_status to 1 (online) in the database
 			include('db_connect.php'); // Make sure to include the database connection
 			$user_id = (int)$_SESSION['login_id'];
-			$conn->query("UPDATE users SET online_status = 1 WHERE id = $user_id");
+			$currentDateTime = date('Y-m-d H:i:s');
+			$conn->query("UPDATE users SET online_status = 1, date = '$currentDateTime' WHERE id = $user_id");
 
 			if ((int)$_SESSION['login_type'] == 1) {
 				return 1; // Admin user
@@ -216,6 +217,52 @@ class Action
 	}
 
 
+	function save_admin()
+	{
+
+
+		extract($_POST);
+
+		// Handle file upload
+		$picture_path = '';
+		if (isset($_FILES['picture']) && $_FILES['picture']['error'] == UPLOAD_ERR_OK) {
+			$upload_dir = 'image/'; // Assuming the 'image' folder is in the current directory
+			$uploaded_file = $upload_dir . basename($_FILES['picture']['name']);
+			move_uploaded_file($_FILES['picture']['tmp_name'], $uploaded_file);
+			$picture_path = $uploaded_file;
+		}
+
+		// Construct the data string for SQL query
+		$data = " name = '$name' ";
+		$data .= ", username = '$username' ";
+		$data .= ", picture_path = '$picture_path' "; // Save the file path to the database
+		$data .= ", type = '$type' ";
+
+		// Check if password is not empty, then hash and add to data
+		if ($type == 1 && !empty($password)) {
+			$hashed_password = md5($password);
+			$data .= ", password = '$hashed_password' ";
+		}
+
+		// Perform database query to save or update user data
+		if (empty($id)) {
+			$save = $conn->query("INSERT INTO users SET " . $data); // Use SET for INSERT
+		} else {
+			$save = $conn->query("UPDATE users SET " . $data . " WHERE id = " . $id); // Use SET for UPDATE
+		}
+
+		// Return success or failure indicator
+		if ($save) {
+			return 1; // Return 1 for success
+		} else {
+			return 0; // Return 0 for failure
+		}
+	}
+
+
+
+
+
 
 	// function save_user(){
 	// 	extract($_POST);
@@ -308,20 +355,25 @@ class Action
 	function save_voting()
 	{
 		extract($_POST);
+		// Construct the data string for SQL query
 		$data = " title = '$title' ";
 		$data .= " , description = '$description' ";
 		$data .= " , time_duration = '$time_duration' ";
+		$data .= " , votedate = '$votedate' ";
 
 		if (empty($id)) {
-			$save = $this->db->query("INSERT INTO voting_list set " . $data);
+			// If id is empty, perform an INSERT operation
+			$save = $this->db->query("INSERT INTO voting_list SET " . $data);
 			if ($save)
-				return 1;
+				return 1; // Return 1 for successful insertion
 		} else {
-			$save = $this->db->query("UPDATE voting_list set " . $data . " where id =" . $id);
+			// If id is not empty, perform an UPDATE operation
+			$save = $this->db->query("UPDATE voting_list SET " . $data . " WHERE id =" . $id);
 			if ($save)
-				return 2;
+				return 2; // Return 2 for successful update
 		}
 	}
+
 
 	function get_voting()
 	{
